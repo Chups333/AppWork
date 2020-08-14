@@ -25,7 +25,7 @@ namespace AppWork.BL.Controller
 
             using (var db = new AppWorkContext())
             {
-                
+
                 return db.Set<T>().Where(l => true).ToList();
 
             }
@@ -35,9 +35,11 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
+
                 db.Set<T>().AddRange(item);
 
-                
+                //db.Set<T>().Distinct();
+
 
                 db.SaveChanges();
             }

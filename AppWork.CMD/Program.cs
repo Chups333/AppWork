@@ -41,8 +41,9 @@ namespace AppWork.CMD
                 switch (key.Key)
                 {
                     case ConsoleKey.E:
-                        //var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
-                        foreach (var item in robotLogsController.RobotLogsList)
+                        var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
+                        
+                        foreach (var item in result)
                         {
                             Console.WriteLine();
                             Console.WriteLine($"{item.LogDataTime} - {item.LogText}");

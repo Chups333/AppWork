@@ -24,6 +24,7 @@ namespace AppWork.BL.Controller
             //Delete();
 
             RobotLogsList = GetRobotLogsData();
+            
 
             CurrentRobotLogs = RobotLogsList.SingleOrDefault(u => u.LogDataTime == logDataTime);
 
@@ -46,6 +47,11 @@ namespace AppWork.BL.Controller
 
             CurrentRobotLogs.LogText = logText;
             Save();
+        }
+
+        public void DeleteOdinakobiy(List<RobotLogs> robotLogsList)
+        {
+
         }
 
         private List<RobotLogs> GetRobotLogsData()
