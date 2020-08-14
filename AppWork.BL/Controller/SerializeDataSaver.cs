@@ -8,8 +8,13 @@ using System.Threading.Tasks;
 
 namespace AppWork.BL.Controller
 {
-    public class SerializeDataSaver : IDataSaver
+    public class SerializeDataSaver : IDataSaver 
     {
+        public void Delete<T>(List<T> item) where T : class
+        {
+            throw new NotImplementedException();
+        }
+
         public List<T> Load<T>() where T : class
         {
             var formatter = new BinaryFormatter();

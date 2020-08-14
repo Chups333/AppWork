@@ -21,9 +21,15 @@ namespace AppWork.CMD
             Console.WriteLine("Добро пожаловать в приложение Robot!!!");
            
 
-            var logDateTime = DateTime.Now;
-            var logText = "Открыл приложение";
-            var robotLogsController = new RobotLogsController(logDateTime,logText);
+            var logDateTimeOpen = DateTime.Now;
+            
+            var robotLogsController = new RobotLogsController(logDateTimeOpen);
+            if (robotLogsController.IsNew)
+            {
+                var logTextOpen = "Открыл приложение";
+
+                robotLogsController.SetNewData(logTextOpen) ;
+            }
             while (true)
             {
                 Console.WriteLine();
@@ -35,8 +41,8 @@ namespace AppWork.CMD
                 switch (key.Key)
                 {
                     case ConsoleKey.E:
-                        var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
-                        foreach (var item in result)
+                        //var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
+                        foreach (var item in robotLogsController.RobotLogsList)
                         {
                             Console.WriteLine();
                             Console.WriteLine($"{item.LogDataTime} - {item.LogText}");
@@ -44,9 +50,16 @@ namespace AppWork.CMD
                         break;
                     case ConsoleKey.Q:
 
-                        logDateTime = DateTime.Now;
-                        logText = "Закрыл приложение";
-                        robotLogsController = new RobotLogsController(logDateTime,logText);
+                        var logDateTimeClose = DateTime.Now;
+                        
+                        robotLogsController = new RobotLogsController(logDateTimeClose);
+
+                        if (robotLogsController.IsNew)
+                        {
+                            var logTextClose = "Закрыл приложение";
+
+                            robotLogsController.SetNewData(logTextClose);
+                        }
                         Environment.Exit(0);
                         break;
                 }

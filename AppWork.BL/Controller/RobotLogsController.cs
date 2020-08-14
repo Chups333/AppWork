@@ -11,29 +11,41 @@ namespace AppWork.BL.Controller
     {
         public List<RobotLogs> RobotLogsList { get; set; }
         public RobotLogs CurrentRobotLogs { get; set; }
-       
-        public RobotLogsController(DateTime logDataTime, String logText)
+        public bool IsNew { get; } = false;
+        public RobotLogsController() { }
+        public RobotLogsController(DateTime logDataTime)
         {
             if (logDataTime < DateTime.Parse("01.01.1900") || logDataTime > DateTime.Now)
             {
                 throw new ArgumentException("Невозможная дата.", nameof(logDataTime));
             }
+
+
+            //Delete();
+
+            RobotLogsList = GetRobotLogsData();
+
+            CurrentRobotLogs = RobotLogsList.SingleOrDefault(u => u.LogDataTime == logDataTime);
+
+            if (CurrentRobotLogs == null)
+            {
+                CurrentRobotLogs = new RobotLogs(logDataTime);
+                RobotLogsList.Add(CurrentRobotLogs);
+                IsNew = true;
+
+            }
+
+        }
+
+        public void SetNewData(String logText)
+        {
             if (string.IsNullOrWhiteSpace(logText))
             {
                 throw new ArgumentNullException("Текст события не может быть пустыи или null", nameof(logText));
             }
-            
-            RobotLogsList = GetRobotLogsData();
 
-            CurrentRobotLogs = RobotLogsList.SingleOrDefault(u => u.LogDataTime == logDataTime && u.LogText==logText);
-
-            if (CurrentRobotLogs == null)
-            {
-                CurrentRobotLogs = new RobotLogs(logDataTime,logText);
-                RobotLogsList.Add(CurrentRobotLogs);
-                Save();
-                
-            }
+            CurrentRobotLogs.LogText = logText;
+            Save();
         }
 
         private List<RobotLogs> GetRobotLogsData()
@@ -41,10 +53,15 @@ namespace AppWork.BL.Controller
             return Load<RobotLogs>() ?? new List<RobotLogs>();
         }
 
-        
+
         public void Save()
         {
             Save(RobotLogsList);
+        }
+
+        public void Delete()
+        {
+            Delete(RobotLogsList);
         }
 
     }

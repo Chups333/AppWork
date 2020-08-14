@@ -33,6 +33,22 @@ namespace AppWork.BL.Model
 
         }
 
+        public RobotLogs(DateTime logDataTime)
+        {
+            #region Проверка
+            if (logDataTime < DateTime.Parse("01.01.1900") || logDataTime > DateTime.Now)
+            {
+                throw new ArgumentException("Невозможная дата.", nameof(logDataTime));
+            }
+            
+            #endregion
+
+            
+            LogDataTime = logDataTime;
+
+        }
+
+
         public override string ToString()
         {
             return LogDataTime.ToString() + " -++ " + LogText; 

@@ -8,6 +8,18 @@ namespace AppWork.BL.Controller
 {
     public class DataBaseDataSaver : IDataSaver
     {
+        public void Delete<T>(List<T> item) where T : class
+        {
+            using (var db = new AppWorkContext())
+            {
+                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [RobotLogs]");
+
+                //db.Set<T>().RemoveRange(db.Set<T>());
+
+                //db.SaveChanges();
+            }
+        }
+
         public List<T> Load<T>() where T : class
         {
 
@@ -23,9 +35,9 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-                //db.Set<T>().AddRange(item);
+                db.Set<T>().AddRange(item);
 
-                db.Set<T>().RemoveRange(db.Set<T>());
+                
 
                 db.SaveChanges();
             }
