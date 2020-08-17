@@ -15,8 +15,6 @@ namespace AppWork.BL.Controller
                 db.Database.ExecuteSqlCommand("TRUNCATE TABLE [RobotLogs]");
 
                 //db.Set<T>().RemoveRange(db.Set<T>());
-
-                //db.SaveChanges();
             }
         }
 
@@ -35,7 +33,7 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-
+                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [RobotLogs]");
                 db.Set<T>().AddRange(item);
 
                 //db.Set<T>().Distinct();
@@ -43,6 +41,7 @@ namespace AppWork.BL.Controller
 
                 db.SaveChanges();
             }
+
         }
     }
 }
