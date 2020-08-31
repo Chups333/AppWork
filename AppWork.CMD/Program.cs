@@ -66,9 +66,17 @@ namespace AppWork.CMD
 
                         web.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
                         web.Navigate().GoToUrl("https://support.rosatom.ru/sm");
-                        web.FindElement(By.XPath("//input[@id='username']")).SendKeys(LOGIN);
-                        web.FindElement(By.XPath("//input[@id='password']")).SendKeys(PASS);
-                        web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
+                        web.Manage().Window.Maximize();
+
+                        var findElement = web.FindElements(By.XPath("//span[@id='cwc_masthead_username']")).Count();
+                        if (findElement == 0)
+                        {
+                            web.FindElement(By.XPath("//input[@id='username']")).SendKeys(LOGIN);
+                            web.FindElement(By.XPath("//input[@id='password']")).SendKeys(PASS);
+                            web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
+                        }
+
+                        
 
                         #region CommentConnect;
                         //try
@@ -121,7 +129,7 @@ namespace AppWork.CMD
                         //}
                         #endregion
 
-                        
+
                         break;
                     case ConsoleKey.Q:
 
@@ -135,7 +143,7 @@ namespace AppWork.CMD
 
                             robotLogsController.SetNewData(logTextClose);
                         }
-                        
+
                         //web.Quit();
                         Environment.Exit(0);
                         break;
