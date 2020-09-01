@@ -142,44 +142,51 @@ namespace AppWork.MyWinForm
 
         private void SetAllZayavki(IWebDriver web, ZayvkiController zayvkiController)
         {
-            By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
+            By by = By.CssSelector ("iframe[name^='mif-comp-ext-gen-top'");
 
             //ждем фрейм пока загрузится
-            web.SwitchTo().Frame(web.FindElement(by));
+            web.SwitchTo().Frame(web.FindElements(by)[0]);
             Thread.Sleep(1000);
             var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
             Thread.Sleep(1000);
             var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
 
-            foreach (var item in collectionIncident)
+            for (int i = 0; i < collectionIncident.Count(); i++)
             {
-                item.Click();
+                Thread.Sleep(20000);
+                web.SwitchTo().DefaultContent();
+                web.SwitchTo().Frame(web.FindElements(by)[0]);
+                collectionIncident[i].Click();
 
-                Thread.Sleep(1000);
+                Thread.Sleep(5000);
+                web.SwitchTo().DefaultContent();
+                web.SwitchTo().Frame(web.FindElements(by)[1]);
+
                 var nomerNameZayavki = web.FindElements(By.CssSelector("#X3")).Count();
                 Thread.Sleep(1000);
-                var status = web.FindElements(By.CssSelector("#X209Border")).Count();
+                var status = web.FindElements(By.CssSelector("#X209Readonly")).Count();
                 Thread.Sleep(1000);
                 //var logZayavok = new LogZayavok(nomerNameZayavki, status);
                 // zayvkiController.Add(search, logZayavok);
 
-                web.SwitchTo().Window(web.CurrentWindowHandle);
+                web.SwitchTo().DefaultContent();
 
                 Thread.Sleep(3000);
 
                 var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
 
                 back.Click();
-
-                web.SwitchTo().Frame(web.FindElement(by));
             }
+                
+                
+            
 
             web.Quit();
-            foreach (var item in zayvkiController.ListCountZayavok)
-            {
-                MAGAZINETEXT.AppendText($"{item.LogZayavok.NomerNameZayavki} - {item.LogZayavok.Status}" + Environment.NewLine);
+            //foreach (var item in zayvkiController.ListCountZayavok)
+            //{
+            //    MAGAZINETEXT.AppendText($"{item.LogZayavok.NomerNameZayavki} - {item.LogZayavok.Status}" + Environment.NewLine);
 
-            }
+            //}
         }
     }
 }
