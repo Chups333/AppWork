@@ -15,6 +15,7 @@ using OpenQA.Selenium;
 using System.Threading;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Remote;
+using AppWork.BL.Model;
 
 namespace AppWork.MyWinForm
 {
@@ -69,11 +70,13 @@ namespace AppWork.MyWinForm
         private void STARTBTN_Click(object sender, EventArgs e)
         {
             IWebDriver web;
+            var zayvkiController = new ZayvkiController();
+
             //var options = new ChromeOptions();
             //options.AddArguments("--incognito");
             ChromeOptions options = new ChromeOptions();
             options.AddArguments("--lang=ru");
-      
+
             web = new ChromeDriver(options);
 
             web.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
@@ -107,57 +110,76 @@ namespace AppWork.MyWinForm
                 }
                 else
                 {
-                    By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
+                    SetAllZayavki(web, zayvkiController);
 
-                    //ждем фрейм пока загрузится
-                    web.SwitchTo().Frame(web.FindElement(by));
-                    Thread.Sleep(1000);
-                    var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
-                    var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
-                    foreach (var item in collectionIncident)
-                    {
-                        item.Click();
-                        web.SwitchTo().Window(web.CurrentWindowHandle);
-                        Thread.Sleep(3000);
-                        var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
-                        back.Click();
-                        web.SwitchTo().Frame(web.FindElement(by));
-                    }
-
-                    MessageBox.Show(search.ToString());
                 }
             }
             else
             {
+                #region comment
+                //By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
 
+                ////ждем фрейм пока загрузится
+                //web.SwitchTo().Frame(web.FindElement(by));
+                //Thread.Sleep(1000);
+                //var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
+                //var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
+                //foreach (var item in collectionIncident)
+                //{
+                //    item.Click();
+                //    web.SwitchTo().Window(web.CurrentWindowHandle);
+                //    Thread.Sleep(3000);
+                //    var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
+                //    back.Click();
+                //    web.SwitchTo().Frame(web.FindElement(by));
+                //}
+                #endregion
 
-                By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
-
-                //ждем фрейм пока загрузится
-                web.SwitchTo().Frame(web.FindElement(by));
-                Thread.Sleep(1000);
-                var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
-                var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
-                foreach (var item in collectionIncident)
-                {
-                    item.Click();
-                    web.SwitchTo().Window(web.CurrentWindowHandle);
-                    Thread.Sleep(3000);
-                    var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
-                    back.Click();
-                    web.SwitchTo().Frame(web.FindElement(by));
-                }
-
-                MessageBox.Show(search.ToString());
-
-
-
-
-
+                SetAllZayavki(web, zayvkiController);
             }
 
         }
 
+        private void SetAllZayavki(IWebDriver web, ZayvkiController zayvkiController)
+        {
+            By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
 
+            //ждем фрейм пока загрузится
+            web.SwitchTo().Frame(web.FindElement(by));
+            Thread.Sleep(1000);
+            var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
+            Thread.Sleep(1000);
+            var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
+
+            foreach (var item in collectionIncident)
+            {
+                item.Click();
+
+                Thread.Sleep(1000);
+                var nomerNameZayavki = web.FindElements(By.CssSelector("#X3")).Count();
+                Thread.Sleep(1000);
+                var status = web.FindElements(By.CssSelector("#X209Border")).Count();
+                Thread.Sleep(1000);
+                //var logZayavok = new LogZayavok(nomerNameZayavki, status);
+                // zayvkiController.Add(search, logZayavok);
+
+                web.SwitchTo().Window(web.CurrentWindowHandle);
+
+                Thread.Sleep(3000);
+
+                var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
+
+                back.Click();
+
+                web.SwitchTo().Frame(web.FindElement(by));
+            }
+
+            web.Quit();
+            foreach (var item in zayvkiController.ListCountZayavok)
+            {
+                MAGAZINETEXT.AppendText($"{item.LogZayavok.NomerNameZayavki} - {item.LogZayavok.Status}" + Environment.NewLine);
+
+            }
+        }
     }
 }

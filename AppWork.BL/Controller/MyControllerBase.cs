@@ -8,7 +8,7 @@ namespace AppWork.BL.Controller
 {
     public abstract class MyControllerBase
     {
-        protected IDataSaver mymanager = new DataBaseDataSaver();
+        protected IDataSaver mymanager = new SerializeDataSaver();
         protected void Save<T>(List<T> item) where T : class
         {
             mymanager.Save(item);

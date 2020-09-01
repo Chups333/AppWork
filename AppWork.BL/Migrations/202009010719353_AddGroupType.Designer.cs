@@ -13,7 +13,7 @@ namespace AppWork.BL.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202008141305561_AddGroupType"; }
+            get { return "202009010719353_AddGroupType"; }
         }
         
         string IMigrationMetadata.Source
