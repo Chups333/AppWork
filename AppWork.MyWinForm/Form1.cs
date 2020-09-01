@@ -69,8 +69,12 @@ namespace AppWork.MyWinForm
         private void STARTBTN_Click(object sender, EventArgs e)
         {
             IWebDriver web;
-
-            web = new ChromeDriver();
+            //var options = new ChromeOptions();
+            //options.AddArguments("--incognito");
+            ChromeOptions options = new ChromeOptions();
+            options.AddArguments("--lang=ru");
+      
+            web = new ChromeDriver(options);
 
             web.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
             web.Navigate().GoToUrl("https://support.rosatom.ru/sm");
@@ -109,15 +113,23 @@ namespace AppWork.MyWinForm
                     web.SwitchTo().Frame(web.FindElement(by));
                     Thread.Sleep(1000);
                     var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
+                    var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
+                    foreach (var item in collectionIncident)
+                    {
+                        item.Click();
+                        web.SwitchTo().Window(web.CurrentWindowHandle);
+                        Thread.Sleep(3000);
+                        var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
+                        back.Click();
+                        web.SwitchTo().Frame(web.FindElement(by));
+                    }
 
-                   
                     MessageBox.Show(search.ToString());
-
                 }
             }
             else
             {
-                
+
 
                 By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
 
@@ -126,15 +138,16 @@ namespace AppWork.MyWinForm
                 Thread.Sleep(1000);
                 var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
                 var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
-                foreach(var item in collectionIncident)
+                foreach (var item in collectionIncident)
                 {
                     item.Click();
                     web.SwitchTo().Window(web.CurrentWindowHandle);
-                    var back = web.FindElements(By.XPath("//em/*[text()='Отмена']"));
-                    back[2].Click();
+                    Thread.Sleep(3000);
+                    var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
+                    back.Click();
                     web.SwitchTo().Frame(web.FindElement(by));
                 }
-                
+
                 MessageBox.Show(search.ToString());
 
 
@@ -143,8 +156,8 @@ namespace AppWork.MyWinForm
 
             }
 
-            }
-
-
         }
+
+
     }
+}
