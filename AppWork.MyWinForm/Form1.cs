@@ -75,23 +75,25 @@ namespace AppWork.MyWinForm
             web.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
             web.Navigate().GoToUrl("https://support.rosatom.ru/sm");
             web.Manage().Window.Maximize();
-            Thread.Sleep(10000);
+
+            //    //MessageBox.Show(search.Count.ToString());
+
             var findElementList = web.FindElements(By.XPath("//span[@id='cwc_masthead_username']"));
             var findElement = findElementList.Count();
             var flag = false;
             if (findElement == 0)
             {
                 web.FindElement(By.XPath("//input[@id='username']")).SendKeys(LOGINTEXT.Text);
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
                 web.FindElement(By.XPath("//input[@id='password']")).SendKeys(PASSTEXT.Text);
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
                 web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
                 flag = true;
             }
 
             if (flag)
             {
-                Thread.Sleep(10000);
+                Thread.Sleep(1000);
                 findElementList = web.FindElements(By.XPath("//span[@id='cwc_masthead_username']"));
                 findElement = findElementList.Count();
                 if (findElement == 0)
@@ -101,46 +103,48 @@ namespace AppWork.MyWinForm
                 }
                 else
                 {
-                    Thread.Sleep(5000);
+                    By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
+
+                    //ждем фрейм пока загрузится
+                    web.SwitchTo().Frame(web.FindElement(by));
+                    Thread.Sleep(1000);
+                    var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
+
                    
-                    var search = web.FindElement(By.XPath("//em/*[text()='Поиск']")).Location; //button[@id='ext-gen-top366']
-                    var actiomClick = new Actions(web);
-                    actiomClick.MoveByOffset(search.X+15, search.Y + 210).Click();
-                    actiomClick.Build().Perform();
+                    MessageBox.Show(search.ToString());
 
                 }
             }
             else
             {
-                Thread.Sleep(5000);
+                
 
-                var search = web.FindElement(By.XPath("//em/*[text()='Поиск']")).Location; //button[@id='ext-gen-top366']
-                var actiomClick = new Actions(web);
-                actiomClick.MoveByOffset(search.X+15, search.Y + 210).Click();
-                actiomClick.Build().Perform();
+                By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
+
+                //ждем фрейм пока загрузится
+                web.SwitchTo().Frame(web.FindElement(by));
+                Thread.Sleep(1000);
+                var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
+                var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
+                foreach(var item in collectionIncident)
+                {
+                    item.Click();
+                    web.SwitchTo().Window(web.CurrentWindowHandle);
+                    var back = web.FindElements(By.XPath("//em/*[text()='Отмена']"));
+                    back[2].Click();
+                    web.SwitchTo().Frame(web.FindElement(by));
+                }
+                
+                MessageBox.Show(search.ToString());
+
+
+
+
+
+            }
+
             }
 
 
-
-
-            //var elements = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).ToList();
-
-            //MAGAZINETEXT.AppendText(elements.Count().ToString());
-
-            //var actiomClick = new Actions(web);
-            //actiomClick.MoveByOffset(search.X, search.Y + 240).Click();
-            //actiomClick.Build().Perform();
-
-            //MAGAZINETEXT.AppendText(search.X.ToString()+" "+search.Y.ToString());
-            //var actiomClick = new Actions(web).Click(search);)
-            //actiomClick.Build().Perform();
-            //web.Quit();
-
-
-
-
         }
-
-
     }
-}
