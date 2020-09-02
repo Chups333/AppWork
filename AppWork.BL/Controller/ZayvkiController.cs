@@ -14,11 +14,9 @@ namespace AppWork.BL.Controller
 
         public ZayvkiController()
         {
-            
             //Delete();
-
-            ListCountZayavok = GetAllListCountZayavok();
             ListLogZayavok = GetAllListLogZayavok();
+            ListCountZayavok = GetAllListCountZayavok();
         }
 
         private List<LogZayavok> GetAllListLogZayavok()
@@ -33,34 +31,33 @@ namespace AppWork.BL.Controller
 
         private void Delete()
         {
-            Delete(ListCountZayavok);
             Delete(ListLogZayavok);
+            Delete(ListCountZayavok);
         }
 
         private void Save()
-        {
+        {   
+            Save(ListLogZayavok); 
             Save(ListCountZayavok);
-            Save(ListLogZayavok);
-
         }
 
         public void Add(int count, LogZayavok logZayavok)
         {
-            var act = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == logZayavok.NomerNameZayavki && a.Status==logZayavok.Status);
+            var act = ListLogZayavok.FirstOrDefault(a => a.NomerNameZayavki == logZayavok.NomerNameZayavki && a.Status==logZayavok.Status);
             if (act == null)
             {
                 ListLogZayavok.Add(logZayavok);
                 var countZayavok = new CountZayavok(count, logZayavok);
                 ListCountZayavok.Add(countZayavok);
-
+                //Delete();
+                Save();
             }
             else
             {
-                var countZayavok = new CountZayavok(count, act);
-                ListCountZayavok.Add(countZayavok);
+                return;
 
             }
-            Save();
+            
         }
     }
 }

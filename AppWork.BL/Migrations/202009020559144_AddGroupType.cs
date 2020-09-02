@@ -8,18 +8,6 @@
         public override void Up()
         {
             CreateTable(
-                "dbo.CountZayavoks",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Count = c.Int(nullable: false),
-                        LogZayavokId = c.Int(nullable: false),
-                    })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.LogZayavoks", t => t.LogZayavokId, cascadeDelete: true)
-                .Index(t => t.LogZayavokId);
-            
-            CreateTable(
                 "dbo.LogZayavoks",
                 c => new
                     {
@@ -28,7 +16,19 @@
                         Status = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
-            
+
+            CreateTable(
+                "dbo.CountZayavoks",
+                c => new
+                {
+                    Id = c.Int(nullable: false, identity: true),
+                    Count = c.Int(nullable: false),
+                    LogZayavokId = c.Int(nullable: false),
+                })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.LogZayavoks", t => t.LogZayavokId, cascadeDelete: true)
+                .Index(t => t.LogZayavokId);
+
             CreateTable(
                 "dbo.RobotLogs",
                 c => new

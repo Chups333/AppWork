@@ -46,6 +46,7 @@ namespace AppWork.BL.Controller
             }
 
             CurrentRobotLogs.LogText = logText;
+            //Delete();
             Save();
         }
 

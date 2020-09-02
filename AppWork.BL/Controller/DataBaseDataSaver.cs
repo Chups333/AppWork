@@ -12,11 +12,9 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [RobotLogs]");
-                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [LogZayavok]");
-                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [CountZayavok]");
+                db.Set<T>().RemoveRange(db.Set<T>());
 
-                //db.Set<T>().RemoveRange(db.Set<T>());
+                db.SaveChanges();
             }
         }
 
@@ -27,6 +25,7 @@ namespace AppWork.BL.Controller
             {
 
                 return db.Set<T>().Where(l => true).ToList();
+                
 
             }
         }
@@ -35,14 +34,8 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-                db.Database.ExecuteSqlCommand("TRUNCATE TABLE [RobotLogs]");
-               // db.Database.ExecuteSqlCommand("TRUNCATE TABLE [LogZayavok]");
-               // db.Database.ExecuteSqlCommand("TRUNCATE TABLE [CountZayavok]");
+                Delete<T>(item);
                 db.Set<T>().AddRange(item);
-
-                //db.Set<T>().Distinct();
-
-
                 db.SaveChanges();
             }
 
