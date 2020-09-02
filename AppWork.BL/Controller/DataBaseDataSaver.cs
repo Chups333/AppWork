@@ -34,7 +34,7 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-                Delete<T>(item);
+                
                 db.Set<T>().AddRange(item);
                 db.SaveChanges();
             }

@@ -9,14 +9,18 @@ namespace AppWork.BL.Controller
 {
     public class ZayvkiController : MyControllerBase
     {
-        public List<CountZayavok> ListCountZayavok{ get; }
+        private readonly User user;
         public List<LogZayavok> ListLogZayavok { get; }
-
         public ZayvkiController()
         {
+
+        }
+        public ZayvkiController(User user)
+        {
+            this.user = user ?? throw new ArgumentNullException(nameof(user));
             //Delete();
             ListLogZayavok = GetAllListLogZayavok();
-            ListCountZayavok = GetAllListCountZayavok();
+
         }
 
         private List<LogZayavok> GetAllListLogZayavok()
@@ -24,40 +28,33 @@ namespace AppWork.BL.Controller
             return Load<LogZayavok>() ?? new List<LogZayavok>();
         }
 
-        private List<CountZayavok> GetAllListCountZayavok()
-        {
-            return Load<CountZayavok>() ?? new List<CountZayavok>();
-        }
 
         private void Delete()
         {
             Delete(ListLogZayavok);
-            Delete(ListCountZayavok);
+
         }
 
         private void Save()
-        {   
-            Save(ListLogZayavok); 
-            Save(ListCountZayavok);
+        {
+            Save(ListLogZayavok);
+
         }
 
-        public void Add(int count, LogZayavok logZayavok)
+        public void Add(string nomerNameZyavki, string status, User user)
         {
-            var act = ListLogZayavok.FirstOrDefault(a => a.NomerNameZayavki == logZayavok.NomerNameZayavki && a.Status==logZayavok.Status);
+            var act = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki && a.Status == status && a.User == user);
             if (act == null)
             {
-                ListLogZayavok.Add(logZayavok);
-                var countZayavok = new CountZayavok(count, logZayavok);
-                ListCountZayavok.Add(countZayavok);
-                //Delete();
-                Save();
+                act = new LogZayavok(nomerNameZyavki, status, user);
+                ListLogZayavok.Add(act);
+                
+               
             }
-            else
-            {
-                return;
+            Delete();
+            Save();
 
-            }
-            
+
         }
     }
 }

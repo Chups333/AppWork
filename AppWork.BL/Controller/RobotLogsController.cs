@@ -9,51 +9,39 @@ namespace AppWork.BL.Controller
 {
     public class RobotLogsController : MyControllerBase
     {
+        private readonly User user;
         public List<RobotLogs> RobotLogsList { get; set; }
         public RobotLogs CurrentRobotLogs { get; set; }
-        public bool IsNew { get; } = false;
         public RobotLogsController() { }
-        public RobotLogsController(DateTime logDataTime)
+        public RobotLogsController(User user)
         {
-            if (logDataTime < DateTime.Parse("01.01.1900") || logDataTime > DateTime.Now)
-            {
-                throw new ArgumentException("Невозможная дата.", nameof(logDataTime));
-            }
 
+            this.user = user ?? throw new ArgumentNullException(nameof(user));
 
             //Delete();
 
             RobotLogsList = GetRobotLogsData();
-            
 
-            CurrentRobotLogs = RobotLogsList.SingleOrDefault(u => u.LogDataTime == logDataTime);
+        }
+
+        public void Add(DateTime logDataTime, string logText, User user)
+        {
+            CurrentRobotLogs = RobotLogsList.SingleOrDefault(u => u.LogDataTime == logDataTime && u.User == user);
 
             if (CurrentRobotLogs == null)
             {
-                CurrentRobotLogs = new RobotLogs(logDataTime);
+                CurrentRobotLogs = new RobotLogs(logDataTime, logText, user);
                 RobotLogsList.Add(CurrentRobotLogs);
-                IsNew = true;
 
             }
-
-        }
-
-        public void SetNewData(String logText)
-        {
-            if (string.IsNullOrWhiteSpace(logText))
-            {
-                throw new ArgumentNullException("Текст события не может быть пустыи или null", nameof(logText));
-            }
-
-            CurrentRobotLogs.LogText = logText;
-            //Delete();
+            Delete();
             Save();
+
+
+            
+
         }
 
-        public void DeleteOdinakobiy(List<RobotLogs> robotLogsList)
-        {
-
-        }
 
         private List<RobotLogs> GetRobotLogsData()
         {

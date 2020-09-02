@@ -10,15 +10,15 @@ namespace AppWork.BL.Controller
 {
     public class AppWorkContext : DbContext
     {
-        public AppWorkContext() : base("DbSanchWorkApp")
+        public AppWorkContext() : base("DataBaseAppWorkSanch")
         {
 
         }
+        public DbSet<User> UserSet { get; set; }
         public DbSet<RobotLogs> RobotLogsSet { get; set; }
-
         public DbSet<LogZayavok> LogZayavokSet { get; set; }
 
-        public DbSet<CountZayavok> CountZayavokSet { get; set; }
+        
 
     }
 }

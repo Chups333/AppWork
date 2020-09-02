@@ -12,10 +12,12 @@ namespace AppWork.BL.Model
         public int Id { get; set; }
         public DateTime LogDataTime { get; set; }
         public string LogText { get; set; }
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
 
         public RobotLogs() { }
 
-        public RobotLogs(DateTime logDataTime,String logText)
+        public RobotLogs(DateTime logDataTime, string logText, User user)
         {
             #region Проверка
             if (logDataTime < DateTime.Parse("01.01.1900") || logDataTime > DateTime.Now)
@@ -29,21 +31,7 @@ namespace AppWork.BL.Model
             #endregion
 
             LogText = logText;
-            LogDataTime = logDataTime;
-
-        }
-
-        public RobotLogs(DateTime logDataTime)
-        {
-            #region Проверка
-            if (logDataTime < DateTime.Parse("01.01.1900") || logDataTime > DateTime.Now)
-            {
-                throw new ArgumentException("Невозможная дата.", nameof(logDataTime));
-            }
-            
-            #endregion
-
-            
+            User = user ?? throw new ArgumentNullException(nameof(user));
             LogDataTime = logDataTime;
 
         }

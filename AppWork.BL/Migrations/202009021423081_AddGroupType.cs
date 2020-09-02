@@ -14,21 +14,22 @@
                         Id = c.Int(nullable: false, identity: true),
                         NomerNameZayavki = c.String(),
                         Status = c.String(),
+                        UserId = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
+            
+            CreateTable(
+                "dbo.Users",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Login = c.String(),
+                        Pass = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
-
-            CreateTable(
-                "dbo.CountZayavoks",
-                c => new
-                {
-                    Id = c.Int(nullable: false, identity: true),
-                    Count = c.Int(nullable: false),
-                    LogZayavokId = c.Int(nullable: false),
-                })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.LogZayavoks", t => t.LogZayavokId, cascadeDelete: true)
-                .Index(t => t.LogZayavokId);
-
+            
             CreateTable(
                 "dbo.RobotLogs",
                 c => new
@@ -36,18 +37,23 @@
                         Id = c.Int(nullable: false, identity: true),
                         LogDataTime = c.DateTime(nullable: false),
                         LogText = c.String(),
+                        UserId = c.Int(nullable: false),
                     })
-                .PrimaryKey(t => t.Id);
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Users", t => t.UserId, cascadeDelete: true)
+                .Index(t => t.UserId);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.CountZayavoks", "LogZayavokId", "dbo.LogZayavoks");
-            DropIndex("dbo.CountZayavoks", new[] { "LogZayavokId" });
+            DropForeignKey("dbo.RobotLogs", "UserId", "dbo.Users");
+            DropForeignKey("dbo.LogZayavoks", "UserId", "dbo.Users");
+            DropIndex("dbo.RobotLogs", new[] { "UserId" });
+            DropIndex("dbo.LogZayavoks", new[] { "UserId" });
             DropTable("dbo.RobotLogs");
+            DropTable("dbo.Users");
             DropTable("dbo.LogZayavoks");
-            DropTable("dbo.CountZayavoks");
         }
     }
 }

@@ -33,116 +33,117 @@ namespace AppWork.MyWinForm
             //в Меню-Вид-Другие окна-Консоль диспетчера пакетов написать строку enable-migrations и add-migration AddGroupType и после update-database
             // эта строка разрешает совершать миграции программно - дописать поле таблицы (без ошибки)
 
-            var logDateTimeOpen = DateTime.Now;
-
-            var robotLogsController = new RobotLogsController(logDateTimeOpen);
-            if (robotLogsController.IsNew)
-            {
-                var logTextOpen = "Открыл приложение";
-
-                robotLogsController.SetNewData(logTextOpen);
-            }
-
-            var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
-
-            foreach (var item in result)
-            {
-
-                MAGAZINETEXT.AppendText($"{item.LogDataTime} - {item.LogText}" + Environment.NewLine);
-            }
+            STARTBTN.Enabled = false;
 
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            var logDateTimeClose = DateTime.Now;
-
-            var robotLogsController = new RobotLogsController(logDateTimeClose);
-
-            if (robotLogsController.IsNew)
+            if (LOGINTEXT.Text != "" && PASSTEXT.Text != "")
             {
+                var logDateTimeClose = DateTime.Now;
                 var logTextClose = "Закрыл приложение";
+                var userController = new UserController(LOGINTEXT.Text);
 
-                robotLogsController.SetNewData(logTextClose);
+                if (userController.IsNewUser)
+                {
+                    userController.SetNewUserData(PASSTEXT.Text);
+                }
+
+
+                var robotLogsController = new RobotLogsController(userController.CurrentUser);
+                robotLogsController.Add(logDateTimeClose, logTextClose, userController.CurrentUser);
             }
         }
 
         private void STARTBTN_Click(object sender, EventArgs e)
         {
-            IWebDriver web;
-            
-
-            //var options = new ChromeOptions();
-            //options.AddArguments("--incognito");
-            ChromeOptions options = new ChromeOptions();
-            options.AddArguments("--lang=ru");
-
-            web = new ChromeDriver(options);
-
-            web.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-            web.Navigate().GoToUrl("https://support.rosatom.ru/sm");
-            web.Manage().Window.Maximize();
-
-            //    //MessageBox.Show(search.Count.ToString());
-
-            var findElementList = web.FindElements(By.XPath("//span[@id='cwc_masthead_username']"));
-            var findElement = findElementList.Count();
-            var flag = false;
-            if (findElement == 0)
+            if (LOGINTEXT.Text != "" && PASSTEXT.Text != "")
             {
-                web.FindElement(By.XPath("//input[@id='username']")).SendKeys(LOGINTEXT.Text);
-                Thread.Sleep(1000);
-                web.FindElement(By.XPath("//input[@id='password']")).SendKeys(PASSTEXT.Text);
-                Thread.Sleep(1000);
-                web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
-                flag = true;
-            }
+                IWebDriver web;
 
-            if (flag)
-            {
-                Thread.Sleep(1000);
-                findElementList = web.FindElements(By.XPath("//span[@id='cwc_masthead_username']"));
-                findElement = findElementList.Count();
+                var userController = new UserController(LOGINTEXT.Text);
+
+                if (userController.IsNewUser)
+                {
+                    userController.SetNewUserData(PASSTEXT.Text);
+                }
+                //var options = new ChromeOptions();
+                //options.AddArguments("--incognito");
+                ChromeOptions options = new ChromeOptions();
+                options.AddArguments("--lang=ru");
+
+                web = new ChromeDriver(options);
+
+                web.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
+                web.Navigate().GoToUrl("https://support.rosatom.ru/sm");
+                web.Manage().Window.Maximize();
+
+                //    //MessageBox.Show(search.Count.ToString());
+
+                var findElementList = web.FindElements(By.XPath("//span[@id='cwc_masthead_username']"));
+                var findElement = findElementList.Count();
+                var flag = false;
                 if (findElement == 0)
                 {
-                    web.Quit();
-                    MessageBox.Show("Проверьте данные и повторите процедуру");
+                    web.FindElement(By.XPath("//input[@id='username']")).SendKeys(LOGINTEXT.Text);
+                    Thread.Sleep(1000);
+                    web.FindElement(By.XPath("//input[@id='password']")).SendKeys(PASSTEXT.Text);
+                    Thread.Sleep(1000);
+                    web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
+                    flag = true;
+                }
+
+                if (flag)
+                {
+                    Thread.Sleep(1000);
+                    findElementList = web.FindElements(By.XPath("//span[@id='cwc_masthead_username']"));
+                    findElement = findElementList.Count();
+                    if (findElement == 0)
+                    {
+                        web.Quit();
+                        MessageBox.Show("Проверьте данные и повторите процедуру");
+                    }
+                    else
+                    {
+                        SetAllZayavki(web, userController.CurrentUser);
+
+                    }
                 }
                 else
                 {
-                    SetAllZayavki(web);
+                    #region comment
+                    //By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
 
+                    ////ждем фрейм пока загрузится
+                    //web.SwitchTo().Frame(web.FindElement(by));
+                    //Thread.Sleep(1000);
+                    //var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
+                    //var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
+                    //foreach (var item in collectionIncident)
+                    //{
+                    //    item.Click();
+                    //    web.SwitchTo().Window(web.CurrentWindowHandle);
+                    //    Thread.Sleep(3000);
+                    //    var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
+                    //    back.Click();
+                    //    web.SwitchTo().Frame(web.FindElement(by));
+                    //}
+                    #endregion
+
+                    SetAllZayavki(web, userController.CurrentUser);
                 }
             }
             else
             {
-                #region comment
-                //By by = By.XPath("//iframe[contains(@name,'mif-comp-ext-gen-top')]");
-
-                ////ждем фрейм пока загрузится
-                //web.SwitchTo().Frame(web.FindElement(by));
-                //Thread.Sleep(1000);
-                //var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
-                //var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
-                //foreach (var item in collectionIncident)
-                //{
-                //    item.Click();
-                //    web.SwitchTo().Window(web.CurrentWindowHandle);
-                //    Thread.Sleep(3000);
-                //    var back = web.FindElement(By.XPath("//em/*[text()='Отмена']"));
-                //    back.Click();
-                //    web.SwitchTo().Frame(web.FindElement(by));
-                //}
-                #endregion
-
-                SetAllZayavki(web);
+                MessageBox.Show("Введите логин и пароль");
             }
 
         }
 
-        private void SetAllZayavki(IWebDriver web)
+        private void SetAllZayavki(IWebDriver web, User CurrentUser)
         {
-            var zayvkiController = new ZayvkiController();
+            var zayvkiController = new ZayvkiController(CurrentUser);
             var by = By.CssSelector("iframe[name^='mif-comp-ext-gen-top'");
 
             //ждем фрейм пока загрузится
@@ -152,6 +153,7 @@ namespace AppWork.MyWinForm
 
             for (int i = 0; i < search; i++)
             {
+                Thread.Sleep(5000);
                 var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
                 collectionIncident[i].Click();
                 Thread.Sleep(5000);
@@ -164,9 +166,9 @@ namespace AppWork.MyWinForm
 
                 var status = web.FindElement(By.CssSelector("#X209Readonly")).GetAttribute("value");
                 Thread.Sleep(1000);
-                var logZayavok = new LogZayavok(nomerNameZayavki, status);
-                
-                zayvkiController.Add(search, logZayavok);
+
+
+                zayvkiController.Add(nomerNameZayavki, status, CurrentUser);
                 Thread.Sleep(1000);
 
                 web.SwitchTo().DefaultContent();
@@ -180,10 +182,47 @@ namespace AppWork.MyWinForm
             }
 
             web.Quit();
-            foreach (var item in zayvkiController.ListCountZayavok)
+            INFOTEXT.Clear();
+            foreach (var item in zayvkiController.ListLogZayavok)
             {
-                MAGAZINETEXT.AppendText($"{item.LogZayavok.NomerNameZayavki} - {item.LogZayavok.Status}" + Environment.NewLine);
+                INFOTEXT.AppendText($"{item.NomerNameZayavki} - {item.Status}" + Environment.NewLine);
+            }
+        }
 
+        private void MAGAZINEBTN_Click(object sender, EventArgs e)
+        {
+            if (LOGINTEXT.Text != "" && PASSTEXT.Text != "")
+            {
+                var logDateTimeOpen = DateTime.Now;
+                var logTextOpen = "Открыл приложение";
+                var userController = new UserController(LOGINTEXT.Text);
+
+                if (userController.IsNewUser)
+                {
+                    userController.SetNewUserData(PASSTEXT.Text);
+                }
+
+                this.Text = this.Text + "-" + userController.CurrentUser.Login;
+
+
+
+                var robotLogsController = new RobotLogsController(userController.CurrentUser);
+                robotLogsController.Add(logDateTimeOpen, logTextOpen, userController.CurrentUser);
+
+                var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
+
+                foreach (var item in result)
+                {
+
+                    MAGAZINETEXT.AppendText($"{item.LogDataTime} - {item.LogText}" + Environment.NewLine);
+                }
+
+                MAGAZINEBTN.Enabled = false;
+                STARTBTN.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("Введите логин и пароль");
             }
         }
     }

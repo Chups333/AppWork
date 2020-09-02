@@ -38,10 +38,6 @@ namespace AppWork.BL.Controller
         {
             var formatter = new BinaryFormatter();
             var name = typeof(T).Name;
-            if (File.Exists(name))
-            {
-                File.Delete(name);
-            }
             
             using (var fs = new FileStream(name, FileMode.OpenOrCreate))
             {
