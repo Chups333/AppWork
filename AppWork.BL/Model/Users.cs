@@ -7,23 +7,22 @@ using System.Threading.Tasks;
 namespace AppWork.BL.Model
 {
     [Serializable]
-    public class User
+    public class Users
     {
         public int Id { get; set; }
         public string Login { get; set; }
         public string Pass { get; set; }
-        public virtual ICollection<RobotLogs> RobotLogss { get; set; }
-        public virtual ICollection<LogZayavok> LogZayavoks { get; set; }
-        public User()
+
+        public Users()
         {
 
         }
-        public User(string login, string pass)
+        public Users(string login, string pass)
         {
             Login = login ?? throw new ArgumentNullException(nameof(login));
             Pass = pass ?? throw new ArgumentNullException(nameof(pass));
         }
-        public User(string login)
+        public Users(string login)
         {
             Login = login ?? throw new ArgumentNullException(nameof(login));
         }

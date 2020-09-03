@@ -12,8 +12,8 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-                db.Set<T>().RemoveRange(db.Set<T>());
-
+                //db.Set<T>().RemoveRange(db.Set<T>());
+                db.Database.ExecuteSqlCommand($"TRUNCATE TABLE [{typeof(T).Name}]");
                 db.SaveChanges();
             }
         }
@@ -34,7 +34,7 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-                
+                db.Database.ExecuteSqlCommand($"TRUNCATE TABLE [{typeof(T).Name}]");
                 db.Set<T>().AddRange(item);
                 db.SaveChanges();
             }

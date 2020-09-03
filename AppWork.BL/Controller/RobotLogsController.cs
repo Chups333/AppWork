@@ -9,37 +9,38 @@ namespace AppWork.BL.Controller
 {
     public class RobotLogsController : MyControllerBase
     {
-        private readonly User user;
         public List<RobotLogs> RobotLogsList { get; set; }
         public RobotLogs CurrentRobotLogs { get; set; }
+        public bool IsNew { get; } = false;
         public RobotLogsController() { }
-        public RobotLogsController(User user)
+        public RobotLogsController(DateTime logDataTime)
         {
-
-            this.user = user ?? throw new ArgumentNullException(nameof(user));
-
             //Delete();
 
             RobotLogsList = GetRobotLogsData();
 
-        }
-
-        public void Add(DateTime logDataTime, string logText, User user)
-        {
-            CurrentRobotLogs = RobotLogsList.SingleOrDefault(u => u.LogDataTime == logDataTime && u.User == user);
+            CurrentRobotLogs = RobotLogsList.SingleOrDefault(u => u.LogDataTime == logDataTime);
 
             if (CurrentRobotLogs == null)
             {
-                CurrentRobotLogs = new RobotLogs(logDataTime, logText, user);
+                CurrentRobotLogs = new RobotLogs(logDataTime);
                 RobotLogsList.Add(CurrentRobotLogs);
-
+                IsNew = true;
             }
-            Delete();
+
+
+        }
+
+        public void Set(string logText)
+        {
+            if (logText is null)
+            {
+                throw new ArgumentNullException(nameof(logText));
+            }
+
+            CurrentRobotLogs.LogText = logText;
+            //Delete();
             Save();
-
-
-            
-
         }
 
 

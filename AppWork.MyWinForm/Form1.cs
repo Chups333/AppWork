@@ -51,8 +51,12 @@ namespace AppWork.MyWinForm
                 }
 
 
-                var robotLogsController = new RobotLogsController(userController.CurrentUser);
-                robotLogsController.Add(logDateTimeClose, logTextClose, userController.CurrentUser);
+                var robotLogsController = new RobotLogsController(logDateTimeClose);
+                if (robotLogsController.IsNew)
+                {
+                    robotLogsController.Set(logTextClose);
+                }
+                //robotLogsController.Add(logDateTimeClose, logTextClose, userController.CurrentUser);
             }
         }
 
@@ -106,7 +110,7 @@ namespace AppWork.MyWinForm
                     }
                     else
                     {
-                        SetAllZayavki(web, userController.CurrentUser);
+                        SetAllZayavki(web);
 
                     }
                 }
@@ -131,7 +135,7 @@ namespace AppWork.MyWinForm
                     //}
                     #endregion
 
-                    SetAllZayavki(web, userController.CurrentUser);
+                    SetAllZayavki(web);
                 }
             }
             else
@@ -141,9 +145,9 @@ namespace AppWork.MyWinForm
 
         }
 
-        private void SetAllZayavki(IWebDriver web, User CurrentUser)
+        private void SetAllZayavki(IWebDriver web)
         {
-            var zayvkiController = new ZayvkiController(CurrentUser);
+            
             var by = By.CssSelector("iframe[name^='mif-comp-ext-gen-top'");
 
             //ждем фрейм пока загрузится
@@ -167,8 +171,11 @@ namespace AppWork.MyWinForm
                 var status = web.FindElement(By.CssSelector("#X209Readonly")).GetAttribute("value");
                 Thread.Sleep(1000);
 
-
-                zayvkiController.Add(nomerNameZayavki, status, CurrentUser);
+                var zayvkiController = new ZayvkiController(nomerNameZayavki, status);
+                if (zayvkiController.IsNew)
+                {
+                    zayvkiController.Set();
+                }
                 Thread.Sleep(1000);
 
                 web.SwitchTo().DefaultContent();
@@ -179,14 +186,16 @@ namespace AppWork.MyWinForm
                 Thread.Sleep(1000);
 
                 web.SwitchTo().Frame(web.FindElements(by)[0]);
+                INFOTEXT.Clear();
+                foreach (var item in zayvkiController.ListLogZayavok)
+                {
+                    INFOTEXT.AppendText($"{item.NomerNameZayavki} - {item.Status}" + Environment.NewLine);
+                }
             }
+            
 
             web.Quit();
-            INFOTEXT.Clear();
-            foreach (var item in zayvkiController.ListLogZayavok)
-            {
-                INFOTEXT.AppendText($"{item.NomerNameZayavki} - {item.Status}" + Environment.NewLine);
-            }
+
         }
 
         private void MAGAZINEBTN_Click(object sender, EventArgs e)
@@ -206,8 +215,15 @@ namespace AppWork.MyWinForm
 
 
 
-                var robotLogsController = new RobotLogsController(userController.CurrentUser);
-                robotLogsController.Add(logDateTimeOpen, logTextOpen, userController.CurrentUser);
+
+                var robotLogsController = new RobotLogsController(logDateTimeOpen);
+
+                if (robotLogsController.IsNew)
+                {
+                    robotLogsController.Set(logTextOpen);
+                }
+
+                //robotLogsController.Add(logDateTimeOpen, logTextOpen, userController.CurrentUser);
 
                 var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
 

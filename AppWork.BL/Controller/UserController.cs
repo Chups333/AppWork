@@ -9,8 +9,8 @@ namespace AppWork.BL.Controller
 {
     public class UserController : MyControllerBase
     {
-        public List<User> Users { get; }
-        public User CurrentUser { get; }
+        public List<Users> Users { get; }
+        public Users CurrentUser { get; }
         public bool IsNewUser { get; } = false;
 
         public UserController(string login)
@@ -22,17 +22,19 @@ namespace AppWork.BL.Controller
 
             Users = GetUsersData();
 
+            CurrentUser = Users.SingleOrDefault(a => a.Login == login);
+
             if (CurrentUser == null)
             {
-                CurrentUser = new User(login);
+                CurrentUser = new Users(login);
                 Users.Add(CurrentUser);
                 IsNewUser = true;
             }
         }
 
-        private List<User> GetUsersData()
+        private List<Users> GetUsersData()
         {
-            return Load<User>() ?? new List<User>();
+            return Load<Users>() ?? new List<Users>();
         }
 
         public void Save()
