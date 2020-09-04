@@ -149,10 +149,9 @@ namespace AppWork.MyWinForm
         {
             
             var by = By.CssSelector("iframe[name^='mif-comp-ext-gen-top'");
-
-            //ждем фрейм пока загрузится
             web.SwitchTo().Frame(web.FindElements(by)[0]);
             Thread.Sleep(1000);
+
             var search = web.FindElements(By.CssSelector("#ext-gen-list-0-17 table")).Count();
 
             for (int i = 0; i < search; i++)
@@ -171,10 +170,23 @@ namespace AppWork.MyWinForm
                 var status = web.FindElement(By.CssSelector("#X209Readonly")).GetAttribute("value");
                 Thread.Sleep(1000);
 
+                var iniciator = web.FindElement(By.CssSelector("#X230")).GetAttribute("value");
+                Thread.Sleep(1000);
+
+                var ispolnitel = web.FindElement(By.CssSelector("#X246")).GetAttribute("value");
+                Thread.Sleep(1000);
+
+                var shotOpisanie = web.FindElement(By.CssSelector("#X12")).GetAttribute("value");
+                Thread.Sleep(1000);
+
+                var fullOpisanie = web.FindElement(By.CssSelector("#X14View")).Text;
+                Thread.Sleep(1000);
+
+
                 var zayvkiController = new ZayvkiController(nomerNameZayavki, status);
                 if (zayvkiController.IsNew)
                 {
-                    zayvkiController.Set();
+                    zayvkiController.Set(iniciator, ispolnitel, shotOpisanie, fullOpisanie);
                 }
                 Thread.Sleep(1000);
 
@@ -189,7 +201,10 @@ namespace AppWork.MyWinForm
                 INFOTEXT.Clear();
                 foreach (var item in zayvkiController.ListLogZayavok)
                 {
-                    INFOTEXT.AppendText($"{item.NomerNameZayavki} - {item.Status}" + Environment.NewLine);
+                    INFOTEXT.AppendText($"{item.NomerNameZayavki} -> {item.Status}" + Environment.NewLine);
+                    INFOTEXT.AppendText($"{item.Iniciator} -> {item.Ispolnitel}" + Environment.NewLine);
+                    INFOTEXT.AppendText($"{item.ShotOpisanie} -> {item.FullOpisanie}" + Environment.NewLine);
+                    INFOTEXT.AppendText(" " + Environment.NewLine);
                 }
             }
             
@@ -214,16 +229,12 @@ namespace AppWork.MyWinForm
                 this.Text = this.Text + "-" + userController.CurrentUser.Login;
 
 
-
-
                 var robotLogsController = new RobotLogsController(logDateTimeOpen);
 
                 if (robotLogsController.IsNew)
                 {
                     robotLogsController.Set(logTextOpen);
                 }
-
-                //robotLogsController.Add(logDateTimeOpen, logTextOpen, userController.CurrentUser);
 
                 var result = robotLogsController.RobotLogsList.OrderBy(p => p.LogDataTime);
 

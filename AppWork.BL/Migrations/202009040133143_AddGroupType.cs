@@ -14,6 +14,10 @@
                         Id = c.Int(nullable: false, identity: true),
                         NomerNameZayavki = c.String(),
                         Status = c.String(),
+                        ShotOpisanie = c.String(),
+                        FullOpisanie = c.String(),
+                        Iniciator = c.String(),
+                        Ispolnitel = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             

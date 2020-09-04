@@ -16,7 +16,7 @@ namespace AppWork.BL.Controller
         {
 
         }
-        public ZayvkiController(string nomerNameZyavki,string status)
+        public ZayvkiController(string nomerNameZyavki, string status)
         {
             if (nomerNameZyavki is null)
             {
@@ -59,9 +59,32 @@ namespace AppWork.BL.Controller
 
         }
 
-        public void Set()
+        public void Set(string iniciator, string ispolnitel, string shotOpisanie, string fullOpisanie)
         {
-            
+            if (iniciator is null)
+            {
+                throw new ArgumentNullException(nameof(iniciator));
+            }
+
+            if (ispolnitel is null)
+            {
+                throw new ArgumentNullException(nameof(ispolnitel));
+            }
+
+            if (shotOpisanie is null)
+            {
+                throw new ArgumentNullException(nameof(shotOpisanie));
+            }
+
+            if (fullOpisanie is null)
+            {
+                throw new ArgumentNullException(nameof(fullOpisanie));
+            }
+            CurrentLogZayavok.Iniciator = iniciator;
+            CurrentLogZayavok.Ispolnitel = ispolnitel;
+            CurrentLogZayavok.ShotOpisanie = shotOpisanie;
+            CurrentLogZayavok.FullOpisanie = fullOpisanie;
+
             //Delete();
             Save();
 
