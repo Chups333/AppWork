@@ -40,6 +40,7 @@ namespace AppWork.BL.Controller
 
             CurrentRobotLogs.LogText = logText;
             //Delete();
+            //SaveList();
             Save();
         }
 
@@ -50,9 +51,15 @@ namespace AppWork.BL.Controller
         }
 
 
-        public void Save()
+        public void SaveList()
         {
-            Save(RobotLogsList);
+            SaveList(RobotLogsList);
+        }
+
+        private void Save()
+        {
+            Save(CurrentRobotLogs);
+
         }
 
         public void Delete()

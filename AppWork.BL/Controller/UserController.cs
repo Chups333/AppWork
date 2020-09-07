@@ -19,7 +19,7 @@ namespace AppWork.BL.Controller
             {
                 throw new ArgumentNullException(nameof(login));
             }
-
+            //Delete();
             Users = GetUsersData();
 
             CurrentUser = Users.SingleOrDefault(a => a.Login == login);
@@ -37,9 +37,14 @@ namespace AppWork.BL.Controller
             return Load<Users>() ?? new List<Users>();
         }
 
-        public void Save()
+        public void SaveList()
         {
-            Save(Users);
+            SaveList(Users);
+        }
+        private void Save()
+        {
+            Save(CurrentUser);
+
         }
         public void Delete()
         {
@@ -54,6 +59,7 @@ namespace AppWork.BL.Controller
             }
 
             CurrentUser.Pass = pass;
+            //SaveList();
             Save();
         }
 

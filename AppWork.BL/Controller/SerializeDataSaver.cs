@@ -34,11 +34,16 @@ namespace AppWork.BL.Controller
             }
         }
 
-        public void Save<T>(List<T> item) where T : class
+        public void Save<T>(T item) where T : class
+        {
+            
+        }
+
+        public void SaveList<T>(List<T> item) where T : class
         {
             var formatter = new BinaryFormatter();
             var name = typeof(T).Name;
-            
+
             using (var fs = new FileStream(name, FileMode.OpenOrCreate))
             {
                 formatter.Serialize(fs, item);

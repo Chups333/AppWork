@@ -147,6 +147,7 @@ namespace AppWork.MyWinForm
 
         private void SetAllZayavki(IWebDriver web)
         {
+            char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
             
             var by = By.CssSelector("iframe[name^='mif-comp-ext-gen-top'");
             web.SwitchTo().Frame(web.FindElements(by)[0]);
@@ -177,11 +178,15 @@ namespace AppWork.MyWinForm
                 Thread.Sleep(1000);
 
                 var shotOpisanie = web.FindElement(By.CssSelector("#X12")).GetAttribute("value");
+                var collectionWordsShotOpis = shotOpisanie.Split(delimiterChars);
                 Thread.Sleep(1000);
 
                 var fullOpisanie = web.FindElement(By.CssSelector("#X14View")).Text;
+                var collectionWordsFullOpis = fullOpisanie.Split(delimiterChars);
                 Thread.Sleep(1000);
 
+                var union = collectionWordsShotOpis.Union(collectionWordsFullOpis);
+                
 
                 var zayvkiController = new ZayvkiController(nomerNameZayavki, status);
                 if (zayvkiController.IsNew)
@@ -204,6 +209,10 @@ namespace AppWork.MyWinForm
                     INFOTEXT.AppendText($"{item.NomerNameZayavki} -> {item.Status}" + Environment.NewLine);
                     INFOTEXT.AppendText($"{item.Iniciator} -> {item.Ispolnitel}" + Environment.NewLine);
                     INFOTEXT.AppendText($"{item.ShotOpisanie} -> {item.FullOpisanie}" + Environment.NewLine);
+                    foreach(var word in union)
+                    {
+                        INFOTEXT.AppendText(word + Environment.NewLine);
+                    }
                     INFOTEXT.AppendText(" " + Environment.NewLine);
                 }
             }

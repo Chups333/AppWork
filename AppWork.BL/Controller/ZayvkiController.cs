@@ -53,9 +53,15 @@ namespace AppWork.BL.Controller
 
         }
 
+        private void SaveList()
+        {
+            SaveList(ListLogZayavok);
+
+        }
+
         private void Save()
         {
-            Save(ListLogZayavok);
+            Save(CurrentLogZayavok);
 
         }
 
@@ -86,6 +92,7 @@ namespace AppWork.BL.Controller
             CurrentLogZayavok.FullOpisanie = fullOpisanie;
 
             //Delete();
+            //SaveList();
             Save();
 
 

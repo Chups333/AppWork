@@ -30,7 +30,19 @@ namespace AppWork.BL.Controller
             }
         }
 
-        public void Save<T>(List<T> item) where T : class
+        public void Save<T>(T item) where T : class
+        {
+            using (var db = new AppWorkContext())
+            {
+                
+                db.Set<T>().Add(item);
+                db.SaveChanges();
+            }
+        }
+
+    
+
+        public void SaveList<T>(List<T> item) where T : class
         {
             using (var db = new AppWorkContext())
             {
@@ -38,7 +50,6 @@ namespace AppWork.BL.Controller
                 db.Set<T>().AddRange(item);
                 db.SaveChanges();
             }
-
         }
     }
 }
