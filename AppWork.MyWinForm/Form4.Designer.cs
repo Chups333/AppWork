@@ -40,6 +40,7 @@
             this.SHOWRABOTNIKI = new System.Windows.Forms.Button();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.TEXTRABOTNIKI = new System.Windows.Forms.TextBox();
+            this.UPDATERABOTNIKI = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label4
@@ -151,11 +152,21 @@
             this.TEXTRABOTNIKI.Size = new System.Drawing.Size(425, 159);
             this.TEXTRABOTNIKI.TabIndex = 34;
             // 
+            // UPDATERABOTNIKI
+            // 
+            this.UPDATERABOTNIKI.Location = new System.Drawing.Point(742, 22);
+            this.UPDATERABOTNIKI.Name = "UPDATERABOTNIKI";
+            this.UPDATERABOTNIKI.Size = new System.Drawing.Size(134, 23);
+            this.UPDATERABOTNIKI.TabIndex = 35;
+            this.UPDATERABOTNIKI.Text = "Изменить работников";
+            this.UPDATERABOTNIKI.UseVisualStyleBackColor = true;
+            // 
             // Form4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1150, 546);
+            this.Controls.Add(this.UPDATERABOTNIKI);
             this.Controls.Add(this.TEXTRABOTNIKI);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.SHOWRABOTNIKI);
@@ -190,5 +201,6 @@
         public System.Windows.Forms.Button SHOWRABOTNIKI;
         public System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.TextBox TEXTRABOTNIKI;
+        public System.Windows.Forms.Button UPDATERABOTNIKI;
     }
 }

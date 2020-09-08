@@ -28,6 +28,7 @@ namespace AppWork.MyWinForm
 
         Form2 f2;
         Form4 f4;
+        Form3 f3;
         RabotnikiController rabontnikController;
         ZayvkiController zayvkiController;
         RobotLogsController robotLogsController;
@@ -75,10 +76,10 @@ namespace AppWork.MyWinForm
                 //var union = collectionWordsShotOpis.Union(collectionWordsFullOpis);
 
 
-                zayvkiController = new ZayvkiController(nomerNameZayavki, status);
+                zayvkiController = new ZayvkiController(nomerNameZayavki);
                 if (zayvkiController.IsNew)
                 {
-                    zayvkiController.Set(iniciator, ispolnitel, shotOpisanie, fullOpisanie);
+                    zayvkiController.Set(status, iniciator, ispolnitel, shotOpisanie, fullOpisanie);
                 }
                 Thread.Sleep(1000);
 
@@ -132,6 +133,8 @@ namespace AppWork.MyWinForm
             }
         }
 
+
+
         private void ADDRABOTNIK_Click(object sender, EventArgs e)
         {
             if (f2.TEXTSURNAME.Text != "" && f2.TEXTNAME.Text != "" && f2.TEXTPATRONYMIC.Text != "" && f2.TEXTLOGIN.Text != "" && f2.TEXTONLINE.Text != "")
@@ -142,12 +145,9 @@ namespace AppWork.MyWinForm
                 var login = f2.TEXTLOGIN.Text;
                 var online = f2.TEXTONLINE.Text;
 
-                rabontnikController = new RabotnikiController(surname, name, patronymic, login);
+                rabontnikController = new RabotnikiController();
 
-                if (rabontnikController.IsNew)
-                {
-                    rabontnikController.Set(online);
-                }
+                rabontnikController.Add(surname, name, patronymic, login, online);
 
                 f2.Close();
 
@@ -177,12 +177,79 @@ namespace AppWork.MyWinForm
                 f4.FormClosed += F4_FormClosed;
                 f4.SHOWRABOTNIKI.Click += SHOWRABOTNIKI_Click;
                 f4.checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
+                f4.UPDATERABOTNIKI.Click += UPDATERABOTNIKI_Click;
                 f4.Show();
             }
             else
             {
                 f4.Activate();
             }
+        }
+
+        private void UPDATERABOTNIKI_Click(object sender, EventArgs e)
+        {
+
+            if (f3 == null)
+            {
+                f3 = new Form3();
+                f3.MdiParent = this;
+                f3.FormClosed += F3_FormClosed; ;
+                f3.LOGINOK.Click += LOGINOK_Click;
+                f3.UPDATERABOTNIK.Click += UPDATERABOTNIK_Click;
+                f3.Show();
+            }
+            else
+            {
+                f3.Activate();
+            }
+        }
+
+        private void UPDATERABOTNIK_Click(object sender, EventArgs e)
+        {
+
+            if (f3.TEXTSURNAME.Text != "" && f3.TEXTNAME.Text != "" && f3.TEXTPATRONYMIC.Text != "" && f3.TEXTLOGIN.Text != "" && f3.TEXTONLINE.Text != "")
+            {
+                rabontnikController = new RabotnikiController();
+                rabontnikController.UpdateItem(f3.TEXTSURNAME.Text, f3.TEXTNAME.Text, f3.TEXTPATRONYMIC.Text, f3.TEXTLOGIN.Text, f3.TEXTONLINE.Text);
+                f4.TEXTRABOTNIKI.Clear();
+                f3.Close();
+
+            }
+            else
+            {
+                MessageBox.Show("Введите все данные");
+            }
+        }
+
+        private void LOGINOK_Click(object sender, EventArgs e)
+        {
+            if (f3.TEXTLOGINOK.Text != "")
+            {
+                rabontnikController = new RabotnikiController();
+                var updateitem = rabontnikController.ListRabotniki.SingleOrDefault(a => a.Login == f3.TEXTLOGINOK.Text);
+                if (updateitem != null)
+                {
+                    f3.TEXTSURNAME.Text = updateitem.Surname;
+                    f3.TEXTNAME.Text = updateitem.Name;
+                    f3.TEXTPATRONYMIC.Text = updateitem.Patronymic;
+                    f3.TEXTLOGIN.Text = updateitem.Login;
+                    f3.TEXTONLINE.Text = updateitem.Online;
+                    
+                }
+                else
+                {
+                    MessageBox.Show("Таких нет");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Введите логин");
+            }
+        }
+
+        private void F3_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            f3 = null;
         }
 
         private void CheckBox1_CheckedChanged(object sender, EventArgs e)

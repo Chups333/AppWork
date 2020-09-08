@@ -18,6 +18,7 @@
                         FullOpisanie = c.String(),
                         Iniciator = c.String(),
                         Ispolnitel = c.String(),
+                        Obrabotka = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             

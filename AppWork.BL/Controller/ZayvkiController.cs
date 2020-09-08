@@ -16,25 +16,22 @@ namespace AppWork.BL.Controller
         {
 
         }
-        public ZayvkiController(string nomerNameZyavki, string status)
+        public ZayvkiController(string nomerNameZyavki)
         {
             if (nomerNameZyavki is null)
             {
                 throw new ArgumentNullException(nameof(nomerNameZyavki));
             }
 
-            if (status is null)
-            {
-                throw new ArgumentNullException(nameof(status));
-            }
+            
 
             //Delete();
             ListLogZayavok = GetAllListLogZayavok();
 
-            CurrentLogZayavok = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki && a.Status == status);
+            CurrentLogZayavok = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki);
             if (CurrentLogZayavok == null)
             {
-                CurrentLogZayavok = new LogZayavoks(nomerNameZyavki, status);
+                CurrentLogZayavok = new LogZayavoks(nomerNameZyavki);
                 ListLogZayavok.Add(CurrentLogZayavok);
                 IsNew = true;
             }
@@ -65,8 +62,13 @@ namespace AppWork.BL.Controller
 
         }
 
-        public void Set(string iniciator, string ispolnitel, string shotOpisanie, string fullOpisanie)
+        public void Set(string status, string iniciator, string ispolnitel, string shotOpisanie, string fullOpisanie)
         {
+            if (status is null)
+            {
+                throw new ArgumentNullException(nameof(status));
+            }
+
             if (iniciator is null)
             {
                 throw new ArgumentNullException(nameof(iniciator));
@@ -86,10 +88,12 @@ namespace AppWork.BL.Controller
             {
                 throw new ArgumentNullException(nameof(fullOpisanie));
             }
+            CurrentLogZayavok.Status = status;
             CurrentLogZayavok.Iniciator = iniciator;
             CurrentLogZayavok.Ispolnitel = ispolnitel;
             CurrentLogZayavok.ShotOpisanie = shotOpisanie;
             CurrentLogZayavok.FullOpisanie = fullOpisanie;
+            CurrentLogZayavok.Obrabotka = 0;
 
             //Delete();
             //SaveList();

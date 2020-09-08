@@ -19,14 +19,6 @@ namespace AppWork.BL.Model
         {
 
         }
-        public Rabotnikis(string surname, string name, string patronymic, string login)
-        {
-            Surname = surname ?? throw new ArgumentNullException(nameof(surname));
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            Patronymic = patronymic ?? throw new ArgumentNullException(nameof(patronymic));
-            Login = login ?? throw new ArgumentNullException(nameof(login));
-            
-        }
         public Rabotnikis(string surname, string name, string patronymic, string login, string online)
         {
             Surname = surname ?? throw new ArgumentNullException(nameof(surname));

@@ -58,11 +58,10 @@
     <Compile Include="Controller\MyControllerBase.cs" />
     <Compile Include="Controller\RabotnikiController.cs" />
     <Compile Include="Controller\RobotLogsController.cs" />
-    <Compile Include="Controller\SerializeDataSaver.cs" />
     <Compile Include="Controller\ZayvkiController.cs" />
-    <Compile Include="Migrations\202009080229560_AddGroupType.cs" />
-    <Compile Include="Migrations\202009080229560_AddGroupType.designer.cs">
-      <DependentUpon>202009080229560_AddGroupType.cs</DependentUpon>
+    <Compile Include="Migrations\202009080327068_AddGroupType.cs" />
+    <Compile Include="Migrations\202009080327068_AddGroupType.designer.cs">
+      <DependentUpon>202009080327068_AddGroupType.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\LogZayavoks.cs" />
@@ -75,8 +74,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202009080229560_AddGroupType.resx">
-      <DependentUpon>202009080229560_AddGroupType.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202009080327068_AddGroupType.resx">
+      <DependentUpon>202009080327068_AddGroupType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

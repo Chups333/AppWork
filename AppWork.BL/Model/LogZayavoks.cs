@@ -16,6 +16,7 @@ namespace AppWork.BL.Model
         public string FullOpisanie { get; set; }
         public string Iniciator { get; set; }
         public string Ispolnitel { get; set; }
+        public int Obrabotka { get; set; }
 
 
         public LogZayavoks() { }
@@ -28,13 +29,14 @@ namespace AppWork.BL.Model
             Ispolnitel = ispolnitel ?? throw new ArgumentNullException(nameof(ispolnitel));
             ShotOpisanie = shotOpisanie ?? throw new ArgumentNullException(nameof(shotOpisanie));
             FullOpisanie = fullOpisanie ?? throw new ArgumentNullException(nameof(fullOpisanie));
+
         }
 
-        public LogZayavoks(string nomerNameZyavki, string status)
+        public LogZayavoks(string nomerNameZyavki)
         {
             NomerNameZayavki = nomerNameZyavki ?? throw new ArgumentNullException(nameof(nomerNameZyavki));
-            Status = status ?? throw new ArgumentNullException(nameof(status));
-            
+
+
         }
 
         public override string ToString()

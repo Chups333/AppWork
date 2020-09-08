@@ -13,6 +13,10 @@ namespace AppWork.BL.Controller
         {
             mymanager.Save(item);
         }
+        protected void Update<T>(T item) where T : class
+        {
+            mymanager.Update(item);
+        }
         protected void SaveList<T>(List<T> item) where T : class
         {
             mymanager.SaveList(item);

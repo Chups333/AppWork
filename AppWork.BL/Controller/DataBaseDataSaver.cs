@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -48,6 +49,16 @@ namespace AppWork.BL.Controller
             {
                 db.Database.ExecuteSqlCommand($"TRUNCATE TABLE [{typeof(T).Name}]");
                 db.Set<T>().AddRange(item);
+                db.SaveChanges();
+            }
+        }
+
+        public void Update<T>(T item) where T : class
+        {
+            using (var db = new AppWorkContext())
+            {
+
+                db.Set<T>().AddOrUpdate(item);
                 db.SaveChanges();
             }
         }

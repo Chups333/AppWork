@@ -11,44 +11,11 @@ namespace AppWork.BL.Controller
     {
         public List<Rabotnikis> ListRabotniki { get; }
         public Rabotnikis CurrentRabotniki { get; set; }
-        public bool IsNew { get; } = false;
+        
         public RabotnikiController()
         {
-            ListRabotniki = GetAllListRabotniki();
-        }
-        public RabotnikiController(string surname, string name, string patronymic, string login)
-        {
-            if (surname is null)
-            {
-                throw new ArgumentNullException(nameof(surname));
-            }
-
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
-
-            if (patronymic is null)
-            {
-                throw new ArgumentNullException(nameof(patronymic));
-            }
-
-            if (login is null)
-            {
-                throw new ArgumentNullException(nameof(login));
-            }
-
-
             //Delete();
             ListRabotniki = GetAllListRabotniki();
-
-            CurrentRabotniki = ListRabotniki.SingleOrDefault(a => a.Surname == surname && a.Name == name && a.Patronymic == patronymic && a.Login == login);
-            if (CurrentRabotniki == null)
-            {
-                CurrentRabotniki = new Rabotnikis(surname,name,patronymic,login);
-                ListRabotniki.Add(CurrentRabotniki);
-                IsNew = true;
-            }
         }
 
         private List<Rabotnikis> GetAllListRabotniki()
@@ -72,17 +39,92 @@ namespace AppWork.BL.Controller
             Save(CurrentRabotniki);
 
         }
-
-        public void Set(string online)
+        private void Update()
         {
+            Update(CurrentRabotniki);
+
+        }
+
+        public void Add(string surname, string name, string patronymic, string login, string online)
+        {
+            if (surname is null)
+            {
+                throw new ArgumentNullException(nameof(surname));
+            }
+
+            if (name is null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (patronymic is null)
+            {
+                throw new ArgumentNullException(nameof(patronymic));
+            }
+
+            if (login is null)
+            {
+                throw new ArgumentNullException(nameof(login));
+            }
+
             if (online is null)
             {
                 throw new ArgumentNullException(nameof(online));
             }
-            CurrentRabotniki.Online = online;
-            
 
-            Save();
+            CurrentRabotniki = ListRabotniki.SingleOrDefault(a => a.Surname == surname && a.Name == name && a.Patronymic == patronymic && a.Login == login);
+            if (CurrentRabotniki == null)
+            {
+                CurrentRabotniki = new Rabotnikis(surname, name, patronymic, login, online);
+                ListRabotniki.Add(CurrentRabotniki);
+                Save();
+
+            }
+
+
+            
+        }
+
+        public void UpdateItem(string surname, string name, string patronymic, string login, string online)
+        {
+            if (surname is null)
+            {
+                throw new ArgumentNullException(nameof(surname));
+            }
+
+            if (name is null)
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            if (patronymic is null)
+            {
+                throw new ArgumentNullException(nameof(patronymic));
+            }
+
+            if (login is null)
+            {
+                throw new ArgumentNullException(nameof(login));
+            }
+
+            if (online is null)
+            {
+                throw new ArgumentNullException(nameof(online));
+            }
+
+            CurrentRabotniki = ListRabotniki.SingleOrDefault(a => a.Surname == surname && a.Name == name && a.Patronymic == patronymic && a.Login == login);
+            if (CurrentRabotniki != null)
+            {
+                CurrentRabotniki.Surname = surname;
+                CurrentRabotniki.Name = name;
+                CurrentRabotniki.Patronymic = patronymic;
+                CurrentRabotniki.Login = login;
+                CurrentRabotniki.Online = online;
+
+
+                Update();
+
+            }
         }
 
     }
