@@ -12,10 +12,10 @@ namespace AppWork.BL.Model
         public int Id { get; set; }
         public DateTime LogDataTime { get; set; }
         public string LogText { get; set; }
-
+        public string UserName { get; set; }
         public RobotLogs() { }
 
-        public RobotLogs(DateTime logDataTime, string logText)
+        public RobotLogs(DateTime logDataTime, string logText, string userName)
         {
             #region Проверка
             if (logDataTime < DateTime.Parse("01.01.1900") || logDataTime > DateTime.Now)
@@ -29,7 +29,9 @@ namespace AppWork.BL.Model
             #endregion
 
             LogText = logText;
+            UserName = userName ?? throw new ArgumentNullException(nameof(userName));
             LogDataTime = logDataTime;
+            
 
         }
 

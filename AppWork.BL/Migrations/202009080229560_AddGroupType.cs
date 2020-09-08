@@ -22,22 +22,26 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.Rabotnikis",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Surname = c.String(),
+                        Name = c.String(),
+                        Patronymic = c.String(),
+                        Login = c.String(),
+                        Online = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.RobotLogs",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
                         LogDataTime = c.DateTime(nullable: false),
                         LogText = c.String(),
-                    })
-                .PrimaryKey(t => t.Id);
-            
-            CreateTable(
-                "dbo.Users",
-                c => new
-                    {
-                        Id = c.Int(nullable: false, identity: true),
-                        Login = c.String(),
-                        Pass = c.String(),
+                        UserName = c.String(),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -45,8 +49,8 @@
         
         public override void Down()
         {
-            DropTable("dbo.Users");
             DropTable("dbo.RobotLogs");
+            DropTable("dbo.Rabotnikis");
             DropTable("dbo.LogZayavoks");
         }
     }

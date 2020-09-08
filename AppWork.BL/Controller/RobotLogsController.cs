@@ -31,7 +31,7 @@ namespace AppWork.BL.Controller
 
         }
 
-        public void Set(string logText)
+        public void Set(string logText, string userName)
         {
             if (logText is null)
             {
@@ -39,6 +39,7 @@ namespace AppWork.BL.Controller
             }
 
             CurrentRobotLogs.LogText = logText;
+            CurrentRobotLogs.UserName = userName;
             //Delete();
             //SaveList();
             Save();
