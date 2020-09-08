@@ -29,6 +29,7 @@ namespace AppWork.MyWinForm
         Form2 f2;
         Form4 f4;
         Form3 f3;
+        Form5 f5;
         RabotnikiController rabontnikController;
         ZayvkiController zayvkiController;
         RobotLogsController robotLogsController;
@@ -76,11 +77,10 @@ namespace AppWork.MyWinForm
                 //var union = collectionWordsShotOpis.Union(collectionWordsFullOpis);
 
 
-                zayvkiController = new ZayvkiController(nomerNameZayavki);
-                if (zayvkiController.IsNew)
-                {
-                    zayvkiController.Set(status, iniciator, ispolnitel, shotOpisanie, fullOpisanie);
-                }
+                zayvkiController = new ZayvkiController();
+
+                zayvkiController.Add(nomerNameZayavki, status, iniciator, ispolnitel, shotOpisanie, fullOpisanie);
+
                 Thread.Sleep(1000);
 
                 web.SwitchTo().DefaultContent();
@@ -94,19 +94,26 @@ namespace AppWork.MyWinForm
 
             }
 
-            f4.INFOTEXT.Clear();
-            foreach (var item in zayvkiController.ListLogZayavok)
+            zayvkiController = new ZayvkiController();
+            if (zayvkiController.ListLogZayavok.Count == 0)
             {
-                f4.INFOTEXT.AppendText($"{item.NomerNameZayavki} -> {item.Status}" + Environment.NewLine);
-                f4.INFOTEXT.AppendText($"{item.Iniciator} -> {item.Ispolnitel}" + Environment.NewLine);
-                f4.INFOTEXT.AppendText($"{item.ShotOpisanie} -> {item.FullOpisanie}" + Environment.NewLine);
-                //foreach (var word in union)
-                //{
-                //    f3.INFOTEXT.AppendText(word + Environment.NewLine);
-                //}
-                f4.INFOTEXT.AppendText(" " + Environment.NewLine);
+                f4.INFOTEXT.Clear();
+                f4.INFOTEXT.AppendText("На данный момент заявок нет");
             }
-
+            else
+            {
+                foreach (var item in zayvkiController.ListLogZayavok)
+                {
+                    f4.INFOTEXT.AppendText($"{item.NomerNameZayavki} -> {item.Status}" + Environment.NewLine);
+                    f4.INFOTEXT.AppendText($"{item.Iniciator} -> {item.Ispolnitel}" + Environment.NewLine);
+                    f4.INFOTEXT.AppendText($"{item.ShotOpisanie} -> {item.FullOpisanie}" + Environment.NewLine);
+                    //foreach (var word in union)
+                    //{
+                    //    f3.INFOTEXT.AppendText(word + Environment.NewLine);
+                    //}
+                    f4.INFOTEXT.AppendText(" " + Environment.NewLine);
+                }
+            }
             web.Quit();
 
         }
@@ -125,6 +132,7 @@ namespace AppWork.MyWinForm
                 f2.MdiParent = this;
                 f2.FormClosed += F2_FormClosed;
                 f2.ADDRABOTNIK.Click += ADDRABOTNIK_Click;
+                f2.Shown += F2_Shown;
                 f2.Show();
             }
             else
@@ -133,17 +141,21 @@ namespace AppWork.MyWinForm
             }
         }
 
-
+        private void F2_Shown(object sender, EventArgs e)
+        {
+            f2.COMBOXONLINE.Text = "";
+            f2.COMBOXONLINE.Items.AddRange( new string[] {"На работе","Не на месте"});
+        }
 
         private void ADDRABOTNIK_Click(object sender, EventArgs e)
         {
-            if (f2.TEXTSURNAME.Text != "" && f2.TEXTNAME.Text != "" && f2.TEXTPATRONYMIC.Text != "" && f2.TEXTLOGIN.Text != "" && f2.TEXTONLINE.Text != "")
+            if (f2.TEXTSURNAME.Text != "" && f2.TEXTNAME.Text != "" && f2.TEXTPATRONYMIC.Text != "" && f2.TEXTLOGIN.Text != "" && f2.COMBOXONLINE.Text != "")
             {
                 var surname = f2.TEXTSURNAME.Text;
                 var name = f2.TEXTNAME.Text;
                 var patronymic = f2.TEXTPATRONYMIC.Text;
                 var login = f2.TEXTLOGIN.Text;
-                var online = f2.TEXTONLINE.Text;
+                var online = f2.COMBOXONLINE.Text;
 
                 rabontnikController = new RabotnikiController();
 
@@ -178,12 +190,73 @@ namespace AppWork.MyWinForm
                 f4.SHOWRABOTNIKI.Click += SHOWRABOTNIKI_Click;
                 f4.checkBox1.CheckedChanged += CheckBox1_CheckedChanged;
                 f4.UPDATERABOTNIKI.Click += UPDATERABOTNIKI_Click;
+                f4.DELETERABOTNIK.Click += DELETERABOTNIK_Click;
                 f4.Show();
             }
             else
             {
                 f4.Activate();
             }
+        }
+
+        private void DELETERABOTNIK_Click(object sender, EventArgs e)
+        {
+            if (f5 == null)
+            {
+                f5 = new Form5();
+                f5.MdiParent = this;
+                f5.FormClosed += F5_FormClosed;
+                f5.DELETERABOTNIKOK.Click += DELETERABOTNIKOK_Click;
+                f5.Shown += F5_Shown;
+                f5.Show();
+            }
+            else
+            {
+                f5.Activate();
+            }
+        }
+
+        private void DELETERABOTNIKOK_Click(object sender, EventArgs e)
+        {
+            if (f5.COMBOXLOGINOK.Text != "")
+            {
+                rabontnikController = new RabotnikiController();
+                var deleteitem = rabontnikController.ListRabotniki.SingleOrDefault(a => a.Login == f5.COMBOXLOGINOK.Text);
+                if (deleteitem != null)
+                {
+                    rabontnikController.DeleteItem(deleteitem.Login);
+                    f4.TEXTRABOTNIKI.Clear();
+                    f5.Close();
+
+                }
+                else
+                {
+                    MessageBox.Show("Таких нет");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Введите логин");
+            }
+        }
+
+        private void F5_Shown(object sender, EventArgs e)
+        {
+            rabontnikController = new RabotnikiController();
+            if (rabontnikController.ListRabotniki.Count == 0)
+            {
+                MessageBox.Show("У вас нет работников. Добавте хотя бы одного работника");
+            }
+            f5.COMBOXLOGINOK.Text = "";
+            foreach (var item in rabontnikController.ListRabotniki)
+            {
+                f5.COMBOXLOGINOK.Items.Add($"{item.Login}");
+            }
+        }
+
+        private void F5_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            f5 = null;
         }
 
         private void UPDATERABOTNIKI_Click(object sender, EventArgs e)
@@ -196,6 +269,7 @@ namespace AppWork.MyWinForm
                 f3.FormClosed += F3_FormClosed; ;
                 f3.LOGINOK.Click += LOGINOK_Click;
                 f3.UPDATERABOTNIK.Click += UPDATERABOTNIK_Click;
+                f3.Shown += F3_Shown;
                 f3.Show();
             }
             else
@@ -204,13 +278,29 @@ namespace AppWork.MyWinForm
             }
         }
 
+        private void F3_Shown(object sender, EventArgs e)
+        {
+            rabontnikController = new RabotnikiController();
+            if (rabontnikController.ListRabotniki.Count == 0)
+            {
+                MessageBox.Show("У вас нет работников. Добавте хотя бы одного работника");
+            }
+            f3.COMBOXONLINE.Text = "";
+            f3.COMBOXLOGINOK.Text = "";
+            foreach (var item in rabontnikController.ListRabotniki)
+            {
+                f3.COMBOXLOGINOK.Items.Add($"{item.Login}");
+            }
+            f3.COMBOXONLINE.Items.AddRange(new string[] { "На работе", "Не на месте" });
+        }
+
         private void UPDATERABOTNIK_Click(object sender, EventArgs e)
         {
 
-            if (f3.TEXTSURNAME.Text != "" && f3.TEXTNAME.Text != "" && f3.TEXTPATRONYMIC.Text != "" && f3.TEXTLOGIN.Text != "" && f3.TEXTONLINE.Text != "")
+            if (f3.TEXTSURNAME.Text != "" && f3.TEXTNAME.Text != "" && f3.TEXTPATRONYMIC.Text != "" && f3.TEXTLOGIN.Text != "" && f3.COMBOXONLINE.Text != "")
             {
                 rabontnikController = new RabotnikiController();
-                rabontnikController.UpdateItem(f3.TEXTSURNAME.Text, f3.TEXTNAME.Text, f3.TEXTPATRONYMIC.Text, f3.TEXTLOGIN.Text, f3.TEXTONLINE.Text);
+                rabontnikController.UpdateItem(f3.TEXTSURNAME.Text, f3.TEXTNAME.Text, f3.TEXTPATRONYMIC.Text, f3.TEXTLOGIN.Text, f3.COMBOXONLINE.Text);
                 f4.TEXTRABOTNIKI.Clear();
                 f3.Close();
 
@@ -223,18 +313,18 @@ namespace AppWork.MyWinForm
 
         private void LOGINOK_Click(object sender, EventArgs e)
         {
-            if (f3.TEXTLOGINOK.Text != "")
+            if (f3.COMBOXLOGINOK.Text != "")
             {
                 rabontnikController = new RabotnikiController();
-                var updateitem = rabontnikController.ListRabotniki.SingleOrDefault(a => a.Login == f3.TEXTLOGINOK.Text);
+                var updateitem = rabontnikController.ListRabotniki.SingleOrDefault(a => a.Login == f3.COMBOXLOGINOK.Text);
                 if (updateitem != null)
                 {
                     f3.TEXTSURNAME.Text = updateitem.Surname;
                     f3.TEXTNAME.Text = updateitem.Name;
                     f3.TEXTPATRONYMIC.Text = updateitem.Patronymic;
                     f3.TEXTLOGIN.Text = updateitem.Login;
-                    f3.TEXTONLINE.Text = updateitem.Online;
-                    
+                    f3.COMBOXONLINE.Text = updateitem.Online;
+
                 }
                 else
                 {
@@ -298,7 +388,7 @@ namespace AppWork.MyWinForm
             var logDateTimeOpen = DateTime.Now;
             var logTextOpen = "Открыл приложение";
 
-            f4.Text = f4.Text + "-" + Environment.UserName;
+            f4.Text = f4.Text + " - " + Environment.UserName;
 
             robotLogsController = new RobotLogsController(logDateTimeOpen);
 

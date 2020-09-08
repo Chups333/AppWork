@@ -17,17 +17,17 @@ namespace AppWork.BL.Controller
         {
             mymanager.Update(item);
         }
-        protected void SaveList<T>(List<T> item) where T : class
+        protected void Delete<T>(T item) where T : class
         {
-            mymanager.SaveList(item);
+            mymanager.Delete(item);
         }
         protected List<T> Load<T>() where T : class
         {
             return mymanager.Load<T>();
         }
-        protected void Delete<T>(List<T> item) where T : class
+        protected void DeleteList<T>(List<T> item) where T : class
         {
-            mymanager.Delete(item);
+            mymanager.DeleteList(item);
         }
     }
 }

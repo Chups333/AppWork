@@ -11,31 +11,11 @@ namespace AppWork.BL.Controller
     {
         public List<LogZayavoks> ListLogZayavok { get; }
         public LogZayavoks CurrentLogZayavok { get; set; }
-        public bool IsNew { get; } = false;
+
         public ZayvkiController()
         {
-
-        }
-        public ZayvkiController(string nomerNameZyavki)
-        {
-            if (nomerNameZyavki is null)
-            {
-                throw new ArgumentNullException(nameof(nomerNameZyavki));
-            }
-
-            
-
-            //Delete();
+            //DeleteList();
             ListLogZayavok = GetAllListLogZayavok();
-
-            CurrentLogZayavok = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki);
-            if (CurrentLogZayavok == null)
-            {
-                CurrentLogZayavok = new LogZayavoks(nomerNameZyavki);
-                ListLogZayavok.Add(CurrentLogZayavok);
-                IsNew = true;
-            }
-
         }
 
         private List<LogZayavoks> GetAllListLogZayavok()
@@ -44,26 +24,31 @@ namespace AppWork.BL.Controller
         }
 
 
-        private void Delete()
+        private void DeleteList()
         {
-            Delete(ListLogZayavok);
+            DeleteList(ListLogZayavok);
 
         }
 
-        private void SaveList()
-        {
-            SaveList(ListLogZayavok);
-
-        }
 
         private void Save()
         {
             Save(CurrentLogZayavok);
 
         }
-
-        public void Set(string status, string iniciator, string ispolnitel, string shotOpisanie, string fullOpisanie)
+        private void Update()
         {
+            Update(CurrentLogZayavok);
+
+        }
+
+        public void Add(string nomerNameZyavki, string status, string iniciator, string ispolnitel, string shotOpisanie, string fullOpisanie)
+        {
+            if (nomerNameZyavki is null)
+            {
+                throw new ArgumentNullException(nameof(nomerNameZyavki));
+            }
+
             if (status is null)
             {
                 throw new ArgumentNullException(nameof(status));
@@ -88,18 +73,46 @@ namespace AppWork.BL.Controller
             {
                 throw new ArgumentNullException(nameof(fullOpisanie));
             }
-            CurrentLogZayavok.Status = status;
-            CurrentLogZayavok.Iniciator = iniciator;
-            CurrentLogZayavok.Ispolnitel = ispolnitel;
-            CurrentLogZayavok.ShotOpisanie = shotOpisanie;
-            CurrentLogZayavok.FullOpisanie = fullOpisanie;
-            CurrentLogZayavok.Obrabotka = 0;
 
-            //Delete();
-            //SaveList();
-            Save();
+            CurrentLogZayavok = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki);
+            if (CurrentLogZayavok == null)
+            {
+                CurrentLogZayavok = new LogZayavoks(nomerNameZyavki, status, iniciator, ispolnitel, shotOpisanie, fullOpisanie);
+                CurrentLogZayavok.Obrabotka = 0;
+                Save();
+            }
+
+        }
+
+        public void UpdateStatus(string nomerNameZyavki, string status)
+        {
+            if (status is null)
+            {
+                throw new ArgumentNullException(nameof(status));
+            }
+
+            CurrentLogZayavok = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki);
+            if (CurrentLogZayavok != null)
+            {
+                CurrentLogZayavok.Status = status;
 
 
+                Update();
+
+            }
+        }
+
+        public void UpdateObrabotka(string nomerNameZyavki)
+        {
+            CurrentLogZayavok = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki);
+            if (CurrentLogZayavok != null)
+            {
+                CurrentLogZayavok.Obrabotka = 1;
+
+
+                Update();
+
+            }
         }
     }
 }

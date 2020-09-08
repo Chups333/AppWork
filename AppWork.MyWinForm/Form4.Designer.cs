@@ -41,6 +41,7 @@
             this.checkBox1 = new System.Windows.Forms.CheckBox();
             this.TEXTRABOTNIKI = new System.Windows.Forms.TextBox();
             this.UPDATERABOTNIKI = new System.Windows.Forms.Button();
+            this.DELETERABOTNIK = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label4
@@ -161,11 +162,21 @@
             this.UPDATERABOTNIKI.Text = "Изменить работников";
             this.UPDATERABOTNIKI.UseVisualStyleBackColor = true;
             // 
+            // DELETERABOTNIK
+            // 
+            this.DELETERABOTNIK.Location = new System.Drawing.Point(894, 22);
+            this.DELETERABOTNIK.Name = "DELETERABOTNIK";
+            this.DELETERABOTNIK.Size = new System.Drawing.Size(120, 23);
+            this.DELETERABOTNIK.TabIndex = 36;
+            this.DELETERABOTNIK.Text = "Удалить работника";
+            this.DELETERABOTNIK.UseVisualStyleBackColor = true;
+            // 
             // Form4
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1150, 546);
+            this.Controls.Add(this.DELETERABOTNIK);
             this.Controls.Add(this.UPDATERABOTNIKI);
             this.Controls.Add(this.TEXTRABOTNIKI);
             this.Controls.Add(this.checkBox1);
@@ -202,5 +213,6 @@
         public System.Windows.Forms.CheckBox checkBox1;
         public System.Windows.Forms.TextBox TEXTRABOTNIKI;
         public System.Windows.Forms.Button UPDATERABOTNIKI;
+        public System.Windows.Forms.Button DELETERABOTNIK;
     }
 }

@@ -29,10 +29,8 @@
         private void InitializeComponent()
         {
             this.LOGINOK = new System.Windows.Forms.Button();
-            this.TEXTLOGINOK = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.UPDATERABOTNIK = new System.Windows.Forms.Button();
-            this.TEXTONLINE = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.TEXTLOGIN = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -42,6 +40,8 @@
             this.label2 = new System.Windows.Forms.Label();
             this.TEXTSURNAME = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
+            this.COMBOXONLINE = new System.Windows.Forms.ComboBox();
+            this.COMBOXLOGINOK = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // LOGINOK
@@ -52,13 +52,6 @@
             this.LOGINOK.TabIndex = 0;
             this.LOGINOK.Text = "Ок";
             this.LOGINOK.UseVisualStyleBackColor = true;
-            // 
-            // TEXTLOGINOK
-            // 
-            this.TEXTLOGINOK.Location = new System.Drawing.Point(295, 25);
-            this.TEXTLOGINOK.Name = "TEXTLOGINOK";
-            this.TEXTLOGINOK.Size = new System.Drawing.Size(139, 20);
-            this.TEXTLOGINOK.TabIndex = 1;
             // 
             // label1
             // 
@@ -77,13 +70,6 @@
             this.UPDATERABOTNIK.TabIndex = 21;
             this.UPDATERABOTNIK.Text = "Изменить";
             this.UPDATERABOTNIK.UseVisualStyleBackColor = true;
-            // 
-            // TEXTONLINE
-            // 
-            this.TEXTONLINE.Location = new System.Drawing.Point(525, 143);
-            this.TEXTONLINE.Name = "TEXTONLINE";
-            this.TEXTONLINE.Size = new System.Drawing.Size(143, 20);
-            this.TEXTONLINE.TabIndex = 20;
             // 
             // label5
             // 
@@ -163,13 +149,30 @@
             this.label6.TabIndex = 11;
             this.label6.Text = "Фамилия";
             // 
+            // COMBOXONLINE
+            // 
+            this.COMBOXONLINE.FormattingEnabled = true;
+            this.COMBOXONLINE.Location = new System.Drawing.Point(525, 143);
+            this.COMBOXONLINE.Name = "COMBOXONLINE";
+            this.COMBOXONLINE.Size = new System.Drawing.Size(143, 21);
+            this.COMBOXONLINE.TabIndex = 22;
+            // 
+            // COMBOXLOGINOK
+            // 
+            this.COMBOXLOGINOK.FormattingEnabled = true;
+            this.COMBOXLOGINOK.Location = new System.Drawing.Point(295, 23);
+            this.COMBOXLOGINOK.Name = "COMBOXLOGINOK";
+            this.COMBOXLOGINOK.Size = new System.Drawing.Size(139, 21);
+            this.COMBOXLOGINOK.TabIndex = 23;
+            // 
             // Form3
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(724, 308);
+            this.Controls.Add(this.COMBOXLOGINOK);
+            this.Controls.Add(this.COMBOXONLINE);
             this.Controls.Add(this.UPDATERABOTNIK);
-            this.Controls.Add(this.TEXTONLINE);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.TEXTLOGIN);
             this.Controls.Add(this.label4);
@@ -180,7 +183,6 @@
             this.Controls.Add(this.TEXTSURNAME);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.TEXTLOGINOK);
             this.Controls.Add(this.LOGINOK);
             this.Name = "Form3";
             this.Text = "Изменить работников";
@@ -192,10 +194,8 @@
         #endregion
 
         public System.Windows.Forms.Button LOGINOK;
-        public System.Windows.Forms.TextBox TEXTLOGINOK;
         public System.Windows.Forms.Label label1;
         public System.Windows.Forms.Button UPDATERABOTNIK;
-        public System.Windows.Forms.TextBox TEXTONLINE;
         public System.Windows.Forms.Label label5;
         public System.Windows.Forms.TextBox TEXTLOGIN;
         public System.Windows.Forms.Label label4;
@@ -205,5 +205,7 @@
         public System.Windows.Forms.Label label2;
         public System.Windows.Forms.TextBox TEXTSURNAME;
         public System.Windows.Forms.Label label6;
+        public System.Windows.Forms.ComboBox COMBOXONLINE;
+        public System.Windows.Forms.ComboBox COMBOXLOGINOK;
     }
 }

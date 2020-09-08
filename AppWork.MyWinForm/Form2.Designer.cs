@@ -36,9 +36,9 @@
             this.label3 = new System.Windows.Forms.Label();
             this.TEXTLOGIN = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.TEXTONLINE = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.ADDRABOTNIK = new System.Windows.Forms.Button();
+            this.COMBOXONLINE = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // label1
@@ -109,13 +109,6 @@
             this.label4.TabIndex = 6;
             this.label4.Text = "Логин";
             // 
-            // TEXTONLINE
-            // 
-            this.TEXTONLINE.Location = new System.Drawing.Point(533, 99);
-            this.TEXTONLINE.Name = "TEXTONLINE";
-            this.TEXTONLINE.Size = new System.Drawing.Size(143, 20);
-            this.TEXTONLINE.TabIndex = 9;
-            // 
             // label5
             // 
             this.label5.AutoSize = true;
@@ -135,13 +128,21 @@
             this.ADDRABOTNIK.Text = "Добавить";
             this.ADDRABOTNIK.UseVisualStyleBackColor = true;
             // 
+            // COMBOXONLINE
+            // 
+            this.COMBOXONLINE.FormattingEnabled = true;
+            this.COMBOXONLINE.Location = new System.Drawing.Point(533, 100);
+            this.COMBOXONLINE.Name = "COMBOXONLINE";
+            this.COMBOXONLINE.Size = new System.Drawing.Size(143, 21);
+            this.COMBOXONLINE.TabIndex = 11;
+            // 
             // Form2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(744, 213);
+            this.Controls.Add(this.COMBOXONLINE);
             this.Controls.Add(this.ADDRABOTNIK);
-            this.Controls.Add(this.TEXTONLINE);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.TEXTLOGIN);
             this.Controls.Add(this.label4);
@@ -169,8 +170,8 @@
         public System.Windows.Forms.Label label3;
         public System.Windows.Forms.TextBox TEXTLOGIN;
         public System.Windows.Forms.Label label4;
-        public System.Windows.Forms.TextBox TEXTONLINE;
         public System.Windows.Forms.Label label5;
         public System.Windows.Forms.Button ADDRABOTNIK;
+        public System.Windows.Forms.ComboBox COMBOXONLINE;
     }
 }

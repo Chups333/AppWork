@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Migrations;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace AppWork.BL.Controller
 {
     public class DataBaseDataSaver : IDataSaver
     {
-        public void Delete<T>(List<T> item) where T : class
+        public void DeleteList<T>(List<T> item) where T : class
         {
             using (var db = new AppWorkContext())
             {
@@ -26,7 +27,7 @@ namespace AppWork.BL.Controller
             {
 
                 return db.Set<T>().Where(l => true).ToList();
-                
+
 
             }
         }
@@ -35,13 +36,13 @@ namespace AppWork.BL.Controller
         {
             using (var db = new AppWorkContext())
             {
-                
+
                 db.Set<T>().Add(item);
                 db.SaveChanges();
             }
         }
 
-    
+
 
         public void SaveList<T>(List<T> item) where T : class
         {
@@ -59,6 +60,18 @@ namespace AppWork.BL.Controller
             {
 
                 db.Set<T>().AddOrUpdate(item);
+                db.SaveChanges();
+            }
+        }
+
+        public void Delete<T>(T item) where T : class
+        {
+            using (var db = new AppWorkContext())
+            {
+                var entry = db.Entry(item);
+                if (entry.State == EntityState.Detached)
+                    db.Set<T>().Attach(item);
+                db.Set<T>().Remove(item);
                 db.SaveChanges();
             }
         }

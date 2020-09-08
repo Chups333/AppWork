@@ -14,7 +14,7 @@ namespace AppWork.BL.Controller
         
         public RabotnikiController()
         {
-            //Delete();
+            //DeleteList();
             ListRabotniki = GetAllListRabotniki();
         }
 
@@ -22,15 +22,15 @@ namespace AppWork.BL.Controller
         {
             return Load<Rabotnikis>() ?? new List<Rabotnikis>();
         }
-        private void Delete()
+        private void DeleteList()
         {
-            Delete(ListRabotniki);
+            DeleteList(ListRabotniki);
 
         }
 
-        private void SaveList()
+        private void Delete()
         {
-            SaveList(ListRabotniki);
+            Delete(CurrentRabotniki);
 
         }
 
@@ -76,7 +76,6 @@ namespace AppWork.BL.Controller
             if (CurrentRabotniki == null)
             {
                 CurrentRabotniki = new Rabotnikis(surname, name, patronymic, login, online);
-                ListRabotniki.Add(CurrentRabotniki);
                 Save();
 
             }
@@ -112,7 +111,7 @@ namespace AppWork.BL.Controller
                 throw new ArgumentNullException(nameof(online));
             }
 
-            CurrentRabotniki = ListRabotniki.SingleOrDefault(a => a.Surname == surname && a.Name == name && a.Patronymic == patronymic && a.Login == login);
+            CurrentRabotniki = ListRabotniki.SingleOrDefault(a => a.Login == login);
             if (CurrentRabotniki != null)
             {
                 CurrentRabotniki.Surname = surname;
@@ -123,6 +122,23 @@ namespace AppWork.BL.Controller
 
 
                 Update();
+
+            }
+        }
+
+        public void DeleteItem(string login)
+        {
+            if (login is null)
+            {
+                throw new ArgumentNullException(nameof(login));
+            }
+
+
+            CurrentRabotniki = ListRabotniki.SingleOrDefault(a => a.Login == login);
+            if (CurrentRabotniki != null)
+            { 
+
+                Delete();
 
             }
         }

@@ -15,7 +15,7 @@ namespace AppWork.BL.Controller
         public RobotLogsController() { }
         public RobotLogsController(DateTime logDataTime)
         {
-            //Delete();
+            //DeleteList();
 
             RobotLogsList = GetRobotLogsData();
 
@@ -40,8 +40,6 @@ namespace AppWork.BL.Controller
 
             CurrentRobotLogs.LogText = logText;
             CurrentRobotLogs.UserName = userName;
-            //Delete();
-            //SaveList();
             Save();
         }
 
@@ -51,21 +49,15 @@ namespace AppWork.BL.Controller
             return Load<RobotLogs>() ?? new List<RobotLogs>();
         }
 
-
-        public void SaveList()
-        {
-            SaveList(RobotLogsList);
-        }
-
         private void Save()
         {
             Save(CurrentRobotLogs);
 
         }
 
-        public void Delete()
+        public void DeleteList()
         {
-            Delete(RobotLogsList);
+            DeleteList(RobotLogsList);
         }
 
     }

@@ -29,14 +29,6 @@ namespace AppWork.BL.Model
             Ispolnitel = ispolnitel ?? throw new ArgumentNullException(nameof(ispolnitel));
             ShotOpisanie = shotOpisanie ?? throw new ArgumentNullException(nameof(shotOpisanie));
             FullOpisanie = fullOpisanie ?? throw new ArgumentNullException(nameof(fullOpisanie));
-
-        }
-
-        public LogZayavoks(string nomerNameZyavki)
-        {
-            NomerNameZayavki = nomerNameZyavki ?? throw new ArgumentNullException(nameof(nomerNameZyavki));
-
-
         }
 
         public override string ToString()
