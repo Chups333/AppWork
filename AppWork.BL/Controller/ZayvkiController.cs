@@ -84,17 +84,17 @@ namespace AppWork.BL.Controller
 
         }
 
-        public void UpdateStatus(string nomerNameZyavki, string status)
+        public void UpdateIspolnitel(string nomerNameZyavki, string ispolnitel)
         {
-            if (status is null)
+            if (ispolnitel is null)
             {
-                throw new ArgumentNullException(nameof(status));
+                throw new ArgumentNullException(nameof(ispolnitel));
             }
 
             CurrentLogZayavok = ListLogZayavok.SingleOrDefault(a => a.NomerNameZayavki == nomerNameZyavki);
             if (CurrentLogZayavok != null)
             {
-                CurrentLogZayavok.Status = status;
+                CurrentLogZayavok.Ispolnitel = ispolnitel;
 
 
                 Update();

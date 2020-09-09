@@ -54,16 +54,18 @@
   <ItemGroup>
     <Compile Include="Controller\AppWorkContext.cs" />
     <Compile Include="Controller\DataBaseDataSaver.cs" />
+    <Compile Include="Controller\HistorysController.cs" />
     <Compile Include="Controller\IDataSaver.cs" />
     <Compile Include="Controller\MyControllerBase.cs" />
     <Compile Include="Controller\RabotnikiController.cs" />
     <Compile Include="Controller\RobotLogsController.cs" />
     <Compile Include="Controller\ZayvkiController.cs" />
-    <Compile Include="Migrations\202009080512579_AddGroupType.cs" />
-    <Compile Include="Migrations\202009080512579_AddGroupType.designer.cs">
-      <DependentUpon>202009080512579_AddGroupType.cs</DependentUpon>
+    <Compile Include="Migrations\202009090619124_AddGroupType.cs" />
+    <Compile Include="Migrations\202009090619124_AddGroupType.designer.cs">
+      <DependentUpon>202009090619124_AddGroupType.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Model\MyHistorys.cs" />
     <Compile Include="Model\LogZayavoks.cs" />
     <Compile Include="Model\Rabotnikis.cs" />
     <Compile Include="Model\RobotLogs.cs" />
@@ -74,8 +76,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202009080512579_AddGroupType.resx">
-      <DependentUpon>202009080512579_AddGroupType.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202009090619124_AddGroupType.resx">
+      <DependentUpon>202009090619124_AddGroupType.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

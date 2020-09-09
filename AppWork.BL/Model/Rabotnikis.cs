@@ -15,6 +15,7 @@ namespace AppWork.BL.Model
         public string Patronymic { get; set; }
         public string Login { get; set; }
         public string Online { get; set; }
+        public int Count { get; set; }
         public Rabotnikis()
         {
 

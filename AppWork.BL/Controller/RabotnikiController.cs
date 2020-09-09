@@ -76,6 +76,7 @@ namespace AppWork.BL.Controller
             if (CurrentRabotniki == null)
             {
                 CurrentRabotniki = new Rabotnikis(surname, name, patronymic, login, online);
+                CurrentRabotniki.Count = 0;
                 Save();
 
             }
@@ -119,6 +120,24 @@ namespace AppWork.BL.Controller
                 CurrentRabotniki.Patronymic = patronymic;
                 CurrentRabotniki.Login = login;
                 CurrentRabotniki.Online = online;
+
+
+                Update();
+
+            }
+        }
+
+        public void UpdateCount(string login, int count)
+        {
+            if (login is null)
+            {
+                throw new ArgumentNullException(nameof(login));
+            }
+
+            CurrentRabotniki = ListRabotniki.SingleOrDefault(a => a.Login == login);
+            if (CurrentRabotniki != null)
+            {
+                CurrentRabotniki.Count = count;
 
 
                 Update();

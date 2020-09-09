@@ -10,7 +10,7 @@ namespace AppWork.BL.Controller
 {
     public class AppWorkContext : DbContext
     {
-        public AppWorkContext() : base("DBsanchMy")
+        public AppWorkContext() : base("SANCHDBDB")
         {
 
         }
@@ -18,6 +18,7 @@ namespace AppWork.BL.Controller
         public DbSet<RobotLogs> RobotLogsSet { get; set; }
         public DbSet<LogZayavoks> LogZayavoksSet { get; set; }
         public DbSet<Rabotnikis> RabotnikisSet { get; set; }
+        public DbSet<MyHistorys> HistorysSet { get; set; }
 
 
 

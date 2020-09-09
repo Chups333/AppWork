@@ -8,6 +8,17 @@
         public override void Up()
         {
             CreateTable(
+                "dbo.MyHistorys",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        Login = c.String(),
+                        NomerNameZayavki = c.String(),
+                        DataTimeHistory = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.LogZayavoks",
                 c => new
                     {
@@ -32,6 +43,7 @@
                         Patronymic = c.String(),
                         Login = c.String(),
                         Online = c.String(),
+                        Count = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -53,6 +65,7 @@
             DropTable("dbo.RobotLogs");
             DropTable("dbo.Rabotnikis");
             DropTable("dbo.LogZayavoks");
+            DropTable("dbo.MyHistorys");
         }
     }
 }

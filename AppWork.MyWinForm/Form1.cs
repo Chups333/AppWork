@@ -33,6 +33,7 @@ namespace AppWork.MyWinForm
         RabotnikiController rabontnikController;
         ZayvkiController zayvkiController;
         RobotLogsController robotLogsController;
+        HistorysController historysController;
 
         private void SetAllZayavki(IWebDriver web)
         {
@@ -93,6 +94,125 @@ namespace AppWork.MyWinForm
                 web.SwitchTo().Frame(web.FindElements(by)[0]);
 
             }
+            web.SwitchTo().DefaultContent();
+            Thread.Sleep(1000);
+
+            zayvkiController = new ZayvkiController();
+            if (zayvkiController.ListLogZayavok.Count == 0)
+            {
+                f4.INFOTEXT.Clear();
+                f4.INFOTEXT.AppendText("На данный момент заявок нет");
+            }
+            else
+            {
+                f4.INFOTEXT.Clear();
+                foreach (var item in zayvkiController.ListLogZayavok)
+                {
+                    f4.INFOTEXT.AppendText($"{item.NomerNameZayavki} -> {item.Status}" + Environment.NewLine);
+                    f4.INFOTEXT.AppendText($"{item.Iniciator} -> {item.Ispolnitel}" + Environment.NewLine);
+                    f4.INFOTEXT.AppendText($"{item.ShotOpisanie} -> {item.FullOpisanie}" + Environment.NewLine);
+                    //foreach (var word in union)
+                    //{
+                    //    f3.INFOTEXT.AppendText(word + Environment.NewLine);
+                    //}
+                    f4.INFOTEXT.AppendText(" " + Environment.NewLine);
+                }
+            }
+
+
+        }
+
+        private void Raspihivanye(IWebDriver web)
+        {
+
+
+            var by = By.CssSelector("iframe[name^='mif-comp-ext-gen-top'");
+            web.SwitchTo().Frame(web.FindElements(by)[0]);
+            Thread.Sleep(1000);
+
+            var search = web.FindElements(By.CssSelector(".x-grid3-scroller table")).Count();
+
+            for (int i = 0; i < search; i++)
+            {
+                Thread.Sleep(5000);
+                var collectionIncident = web.FindElements(By.CssSelector(".firstColumnColor"));
+                collectionIncident[search - 1 - i].Click();
+                Thread.Sleep(5000);
+
+                web.SwitchTo().DefaultContent();
+                web.SwitchTo().Frame(web.FindElements(by)[1]);
+
+                var nomerNameZayavki = web.FindElement(By.CssSelector("#X3")).GetAttribute("value");
+
+
+                var ispolnitel = web.FindElement(By.CssSelector("#X246"));
+                ispolnitel.Click();
+                Thread.Sleep(1000);
+
+                rabontnikController = new RabotnikiController();
+                historysController = new HistorysController();
+                zayvkiController = new ZayvkiController();
+
+                if (historysController.ListHistorys.Count != 0)
+                {
+                    foreach (var item in rabontnikController.ListRabotniki)
+                    {
+
+                        var collichectvo = historysController.ListHistorys.Where(a => a.Login == item.Login).ToList().Count;
+                        var rabotnikUpdate = rabontnikController.ListRabotniki.SingleOrDefault(b => b.Login == item.Login);
+                        if (rabotnikUpdate != null)
+                        {
+                            rabontnikController.UpdateCount(item.Login, collichectvo);
+                        }
+
+                    }
+                    rabontnikController = new RabotnikiController();
+                    var result = rabontnikController.ListRabotniki.OrderBy(p => p.Count).ToList();
+                    foreach (var newitem in result)
+                    {
+                        if (newitem.Online == "На работе")
+                        {
+                            var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
+                            newispolnitel.Click();
+                            Thread.Sleep(1000);
+                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki,DateTime.Now);
+                            zayvkiController.UpdateObrabotka(nomerNameZayavki);
+                            zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
+                            break;
+
+                        }
+                    }
+
+                }
+                else
+                {
+                    var result = rabontnikController.ListRabotniki.ToList();
+                    foreach (var newitem in result)
+                    {
+                        if (newitem.Online == "На работе")
+                        {
+                            var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
+                            newispolnitel.Click();
+                            Thread.Sleep(1000);
+                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki,DateTime.Now);
+                            zayvkiController.UpdateObrabotka(nomerNameZayavki);
+                            zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
+                            break;
+                        }
+                    }
+                }
+
+
+                web.SwitchTo().DefaultContent();
+                Thread.Sleep(1000);
+
+                var saveButton = web.FindElement(By.XPath("//em/*[text()='Сохранить и выйти']"));
+                saveButton.Click();
+                Thread.Sleep(1000);
+
+                web.SwitchTo().Frame(web.FindElements(by)[0]);
+
+            }
 
             zayvkiController = new ZayvkiController();
             if (zayvkiController.ListLogZayavok.Count == 0)
@@ -116,9 +236,8 @@ namespace AppWork.MyWinForm
             }
             web.Quit();
 
+
         }
-
-
 
 
 
@@ -144,7 +263,7 @@ namespace AppWork.MyWinForm
         private void F2_Shown(object sender, EventArgs e)
         {
             f2.COMBOXONLINE.Text = "";
-            f2.COMBOXONLINE.Items.AddRange( new string[] {"На работе","Не на месте"});
+            f2.COMBOXONLINE.Items.AddRange(new string[] { "На работе", "Не на месте" });
         }
 
         private void ADDRABOTNIK_Click(object sender, EventArgs e)
@@ -454,7 +573,7 @@ namespace AppWork.MyWinForm
                     else
                     {
                         SetAllZayavki(web);
-
+                        Raspihivanye(web);
                     }
                 }
                 else
@@ -479,6 +598,7 @@ namespace AppWork.MyWinForm
                     #endregion
 
                     SetAllZayavki(web);
+                    Raspihivanye(web);
                 }
             }
             else
