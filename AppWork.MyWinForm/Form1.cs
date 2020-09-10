@@ -155,17 +155,7 @@ namespace AppWork.MyWinForm
 
                 if (historysController.ListHistorys.Count != 0)
                 {
-                    foreach (var item in rabontnikController.ListRabotniki)
-                    {
-
-                        var collichectvo = historysController.ListHistorys.Where(a => a.Login == item.Login).ToList().Count;
-                        var rabotnikUpdate = rabontnikController.ListRabotniki.SingleOrDefault(b => b.Login == item.Login);
-                        if (rabotnikUpdate != null)
-                        {
-                            rabontnikController.UpdateCount(item.Login, collichectvo);
-                        }
-
-                    }
+                    
                     rabontnikController = new RabotnikiController();
                     var result = rabontnikController.ListRabotniki.OrderBy(p => p.Count).ToList();
                     foreach (var newitem in result)
@@ -181,6 +171,18 @@ namespace AppWork.MyWinForm
                             break;
 
                         }
+                    }
+
+                    foreach (var item in rabontnikController.ListRabotniki)
+                    {
+
+                        var collichectvo = historysController.ListHistorys.Where(a => a.Login == item.Login).ToList().Count;
+                        var rabotnikUpdate = rabontnikController.ListRabotniki.SingleOrDefault(b => b.Login == item.Login);
+                        if (rabotnikUpdate != null)
+                        {
+                            rabontnikController.UpdateCount(item.Login, collichectvo);
+                        }
+
                     }
 
                 }
@@ -542,7 +544,7 @@ namespace AppWork.MyWinForm
                 web = new ChromeDriver(options);
 
                 web.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(20);
-                web.Navigate().GoToUrl("https://support.rosatom.ru/sm");
+                web.Navigate().GoToUrl("https://support.rosatom.ru/sm/index.do");
                 web.Manage().Window.Maximize();
 
                 //    //MessageBox.Show(search.Count.ToString());
@@ -552,11 +554,14 @@ namespace AppWork.MyWinForm
                 var flag = false;
                 if (findElement == 0)
                 {
-                    web.FindElement(By.XPath("//input[@id='username']")).SendKeys(f4.LOGINTEXT.Text);
-                    Thread.Sleep(1000);
-                    web.FindElement(By.XPath("//input[@id='password']")).SendKeys(f4.PASSTEXT.Text);
-                    Thread.Sleep(1000);
-                    web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
+                    web.Navigate().GoToUrl("https://" + f4.LOGINTEXT.Text + ":" + f4.PASSTEXT.Text + "@" + "support.rosatom.ru/sm/index.do");
+                    #region Нужно мне авторизация
+                    //web.FindElement(By.XPath("//input[@id='username']")).SendKeys(f4.LOGINTEXT.Text);
+                    //Thread.Sleep(1000);
+                    //web.FindElement(By.XPath("//input[@id='password']")).SendKeys(f4.PASSTEXT.Text);
+                    //Thread.Sleep(1000);
+                    //web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
+                    #endregion
                     flag = true;
                 }
 
