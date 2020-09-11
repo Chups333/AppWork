@@ -19,6 +19,17 @@
                 .PrimaryKey(t => t.Id);
             
             CreateTable(
+                "dbo.KeysAndPrioritets",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        NameKey = c.String(),
+                        Prioritet = c.Int(nullable: false),
+                        Login = c.String(),
+                    })
+                .PrimaryKey(t => t.Id);
+            
+            CreateTable(
                 "dbo.LogZayavoks",
                 c => new
                     {
@@ -65,6 +76,7 @@
             DropTable("dbo.RobotLogs");
             DropTable("dbo.Rabotnikis");
             DropTable("dbo.LogZayavoks");
+            DropTable("dbo.KeysAndPrioritets");
             DropTable("dbo.MyHistorys");
         }
     }

@@ -30,10 +30,12 @@ namespace AppWork.MyWinForm
         Form4 f4;
         Form3 f3;
         Form5 f5;
+        Form6 f6;
         RabotnikiController rabontnikController;
         ZayvkiController zayvkiController;
         RobotLogsController robotLogsController;
         HistorysController historysController;
+        KeysAndPrioritetsController keysAndPrioritetsController;
 
         private void SetAllZayavki(IWebDriver web)
         {
@@ -155,7 +157,7 @@ namespace AppWork.MyWinForm
 
                 if (historysController.ListHistorys.Count != 0)
                 {
-                    
+
                     rabontnikController = new RabotnikiController();
                     var result = rabontnikController.ListRabotniki.OrderBy(p => p.Count).ToList();
                     foreach (var newitem in result)
@@ -165,7 +167,7 @@ namespace AppWork.MyWinForm
                             var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
                             newispolnitel.Click();
                             Thread.Sleep(1000);
-                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki,DateTime.Now);
+                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
                             zayvkiController.UpdateObrabotka(nomerNameZayavki);
                             zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
                             break;
@@ -196,7 +198,7 @@ namespace AppWork.MyWinForm
                             var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
                             newispolnitel.Click();
                             Thread.Sleep(1000);
-                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki,DateTime.Now);
+                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
                             zayvkiController.UpdateObrabotka(nomerNameZayavki);
                             zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
                             break;
@@ -628,6 +630,137 @@ namespace AppWork.MyWinForm
 
         }
 
+        private void настройкаКлючейToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (f6 == null)
+            {
+                f6 = new Form6();
+                f6.MdiParent = this;
+                f6.Shown += F6_Shown;
+                f6.FormClosed += F6_FormClosed;
+                f6.BTNADD.Click += BTNADD_Click;
+                f6.BTNUPD.Click += BTNUPD_Click;
+                f6.BTNDEL.Click += BTNDEL_Click;
+                f6.BTNSHOW.Click += BTNSHOW_Click;
+                f6.Show();
+            }
+            else
+            {
+                f6.Activate();
+            }
+        }
 
+        private void BTNSHOW_Click(object sender, EventArgs e)
+        {
+            f6.TEXTSHOWKEYS.Clear();
+            if (f6.COMBOXLOGIN.Text == "")
+            {
+                keysAndPrioritetsController = new KeysAndPrioritetsController();
+                foreach (var item in keysAndPrioritetsController.ListKeysAndPrioritets)
+                {
+                    f6.TEXTSHOWKEYS.AppendText($"{item.Login} - {item.NameKey} - {item.Prioritet}" + Environment.NewLine);
+                }
+            }
+            else
+            {
+                keysAndPrioritetsController = new KeysAndPrioritetsController();
+                var newList = keysAndPrioritetsController.ListKeysAndPrioritets.Where(a => a.Login == f6.COMBOXLOGIN.Text).ToList();
+                foreach (var item in newList)
+                {
+                    f6.TEXTSHOWKEYS.AppendText($"{item.Login} - {item.NameKey} - {item.Prioritet}" + Environment.NewLine);
+                }
+            }
+        }
+
+        private void BTNDEL_Click(object sender, EventArgs e)
+        {
+            if (f6.COMBOXLOGIN.Text != "" && f6.COMBOXKEY.Text != "")
+            {
+                keysAndPrioritetsController = new KeysAndPrioritetsController();
+                var deleteitem = keysAndPrioritetsController.ListKeysAndPrioritets.SingleOrDefault(a => a.Login == f6.COMBOXLOGIN.Text && a.NameKey == f6.COMBOXKEY.Text);
+                if (deleteitem != null)
+                {
+                    keysAndPrioritetsController.DeleteItem(deleteitem.Login, deleteitem.NameKey);
+                    f6.Close();
+
+                }
+                else
+                {
+                    MessageBox.Show("Таких нет");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Введите логин");
+            }
+        }
+
+        private void BTNUPD_Click(object sender, EventArgs e)
+        {
+            if (f6.COMBOXLOGIN.Text != "" && f6.COMBOXKEY.Text != "")
+            {
+                keysAndPrioritetsController = new KeysAndPrioritetsController();
+                if (f6.CHECKBOXPRIOR.Checked == true)
+                {
+                    keysAndPrioritetsController.UpdateItem(f6.COMBOXLOGIN.Text, f6.COMBOXKEY.Text, 1);
+                }
+                else
+                {
+                    keysAndPrioritetsController.UpdateItem(f6.COMBOXLOGIN.Text, f6.COMBOXKEY.Text, 0);
+                }
+                f6.Close();
+            }
+            else
+            {
+                MessageBox.Show("Введите все данные");
+            }
+        }
+
+        private void BTNADD_Click(object sender, EventArgs e)
+        {
+            if (f6.COMBOXLOGIN.Text != "" && f6.COMBOXKEY.Text != "")
+            {
+                keysAndPrioritetsController = new KeysAndPrioritetsController();
+                if (f6.CHECKBOXPRIOR.Checked == true)
+                {
+                    keysAndPrioritetsController.Add(f6.COMBOXLOGIN.Text, f6.COMBOXKEY.Text, 1);
+                }
+                else
+                {
+                    keysAndPrioritetsController.Add(f6.COMBOXLOGIN.Text, f6.COMBOXKEY.Text, 0);
+                }
+                f6.Close();
+            }
+            else
+            {
+                MessageBox.Show("Введите все данные");
+            }
+        }
+
+        private void F6_Shown(object sender, EventArgs e)
+        {
+            rabontnikController = new RabotnikiController();
+            keysAndPrioritetsController = new KeysAndPrioritetsController();
+            f6.COMBOXLOGIN.Text = "";
+            f6.COMBOXKEY.Text = "";
+            foreach (var item in rabontnikController.ListRabotniki)
+            {
+                f6.COMBOXLOGIN.Items.Add($"{item.Login}");
+            }
+            foreach (var item in keysAndPrioritetsController.ListKeysAndPrioritets)
+            {
+                f6.COMBOXKEY.Items.Add($"{item.NameKey}");
+            }
+
+            object[] items = f6.COMBOXKEY.Items.OfType<String>().Distinct().ToArray();
+            f6.COMBOXKEY.Items.Clear();
+            f6.COMBOXKEY.Items.AddRange(items);
+
+        }
+
+        private void F6_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            f6 = null;
+        }
     }
 }

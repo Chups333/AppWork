@@ -32,6 +32,7 @@
             this.дейсвтияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.добавитьРаботникаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.работаСРоботомToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.настройкаКлючейToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,7 +50,8 @@
             // 
             this.дейсвтияToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.добавитьРаботникаToolStripMenuItem,
-            this.работаСРоботомToolStripMenuItem});
+            this.работаСРоботомToolStripMenuItem,
+            this.настройкаКлючейToolStripMenuItem});
             this.дейсвтияToolStripMenuItem.Name = "дейсвтияToolStripMenuItem";
             this.дейсвтияToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.дейсвтияToolStripMenuItem.Text = "Меню";
@@ -67,6 +69,13 @@
             this.работаСРоботомToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
             this.работаСРоботомToolStripMenuItem.Text = "Работа с роботом";
             this.работаСРоботомToolStripMenuItem.Click += new System.EventHandler(this.работаСРоботомToolStripMenuItem_Click);
+            // 
+            // настройкаКлючейToolStripMenuItem
+            // 
+            this.настройкаКлючейToolStripMenuItem.Name = "настройкаКлючейToolStripMenuItem";
+            this.настройкаКлючейToolStripMenuItem.Size = new System.Drawing.Size(187, 22);
+            this.настройкаКлючейToolStripMenuItem.Text = "Настройка ключей";
+            this.настройкаКлючейToolStripMenuItem.Click += new System.EventHandler(this.настройкаКлючейToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -92,6 +101,7 @@
         public System.Windows.Forms.ToolStripMenuItem дейсвтияToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem добавитьРаботникаToolStripMenuItem;
         public System.Windows.Forms.ToolStripMenuItem работаСРоботомToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem настройкаКлючейToolStripMenuItem;
     }
 }
 

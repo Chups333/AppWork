@@ -19,6 +19,7 @@ namespace AppWork.BL.Controller
         public DbSet<LogZayavoks> LogZayavoksSet { get; set; }
         public DbSet<Rabotnikis> RabotnikisSet { get; set; }
         public DbSet<MyHistorys> HistorysSet { get; set; }
+        public DbSet<KeysAndPrioritets> KeysAndPrioritetsSet { get; set; }
 
 
 
