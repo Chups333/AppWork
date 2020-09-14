@@ -79,10 +79,9 @@ namespace AppWork.BL.Controller
                 throw new ArgumentNullException(nameof(nameKey));
             }
 
-            CurrentKeysAndPrioritets = ListKeysAndPrioritets.SingleOrDefault(a => a.Login == login);
+            CurrentKeysAndPrioritets = ListKeysAndPrioritets.SingleOrDefault(a => a.Login == login && a.NameKey==nameKey);
             if (CurrentKeysAndPrioritets != null)
             {
-                CurrentKeysAndPrioritets.NameKey = nameKey;
                 CurrentKeysAndPrioritets.Prioritet = prioritet;
                 Update();
 

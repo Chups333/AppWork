@@ -57,7 +57,7 @@ namespace AppWork.MyWinForm
                 web.SwitchTo().DefaultContent();
                 web.SwitchTo().Frame(web.FindElements(by)[1]);
 
-                var nomerNameZayavki = web.FindElement(By.CssSelector("#X3")).GetAttribute("value");
+                var nomerNameZayavki = web.FindElement(By.Name("instance/header/number")).GetAttribute("value");
                 Thread.Sleep(1000);
 
                 var status = web.FindElement(By.CssSelector("#X209Readonly")).GetAttribute("value");
@@ -126,7 +126,7 @@ namespace AppWork.MyWinForm
 
         private void Raspihivanye(IWebDriver web)
         {
-
+            char[] delimiterChars = { ' ', ',', '.', ':', '\t' };
 
             var by = By.CssSelector("iframe[name^='mif-comp-ext-gen-top'");
             web.SwitchTo().Frame(web.FindElements(by)[0]);
@@ -144,8 +144,18 @@ namespace AppWork.MyWinForm
                 web.SwitchTo().DefaultContent();
                 web.SwitchTo().Frame(web.FindElements(by)[1]);
 
-                var nomerNameZayavki = web.FindElement(By.CssSelector("#X3")).GetAttribute("value");
+                var nomerNameZayavki = web.FindElement(By.Name("instance/header/number")).GetAttribute("value");
+                Thread.Sleep(1000);
 
+                var shotOpisanie = web.FindElement(By.CssSelector("#X12")).GetAttribute("value");
+                var collectionWordsShotOpis = shotOpisanie.Split(delimiterChars);
+                Thread.Sleep(1000);
+
+                var fullOpisanie = web.FindElement(By.CssSelector("#X14View")).Text;
+                var collectionWordsFullOpis = fullOpisanie.Split(delimiterChars);
+                Thread.Sleep(1000);
+
+                var union = collectionWordsShotOpis.Union(collectionWordsFullOpis).ToList();
 
                 var ispolnitel = web.FindElement(By.CssSelector("#X246"));
                 ispolnitel.Click();
@@ -154,24 +164,76 @@ namespace AppWork.MyWinForm
                 rabontnikController = new RabotnikiController();
                 historysController = new HistorysController();
                 zayvkiController = new ZayvkiController();
+                keysAndPrioritetsController = new KeysAndPrioritetsController();
+                var flag = false;
+
 
                 if (historysController.ListHistorys.Count != 0)
                 {
-
                     rabontnikController = new RabotnikiController();
                     var result = rabontnikController.ListRabotniki.OrderBy(p => p.Count).ToList();
                     foreach (var newitem in result)
                     {
                         if (newitem.Online == "На работе")
                         {
-                            var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
-                            newispolnitel.Click();
-                            Thread.Sleep(1000);
-                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
-                            zayvkiController.UpdateObrabotka(nomerNameZayavki);
-                            zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
-                            break;
+                            foreach (var key in keysAndPrioritetsController.ListKeysAndPrioritets)
+                            {
+                                if (key.Login == newitem.Login)
+                                {
+                                    if (union.Contains(key.NameKey))
+                                    {
+                                        if (key.Prioritet == 1)
+                                        {
+                                            var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
+                                            newispolnitel.Click();
+                                            Thread.Sleep(1000);
+                                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
+                                            zayvkiController.UpdateObrabotka(nomerNameZayavki);
+                                            zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
+                                            flag = true;
+                                            break;
+                                        }
 
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+
+                    if (flag == false)
+                    {
+                        rabontnikController = new RabotnikiController();
+                        var result1 = rabontnikController.ListRabotniki.OrderBy(p => p.Count).ToList();
+                        foreach (var newitem in result1)
+                        {
+                            if (newitem.Online == "На работе")
+                            {
+                                foreach (var key in keysAndPrioritetsController.ListKeysAndPrioritets)
+                                {
+                                    if (key.Login == newitem.Login)
+                                    {
+                                        if (union.Contains(key.NameKey))
+                                        {
+                                            if (key.Prioritet == 0)
+                                            {
+                                                var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
+                                                newispolnitel.Click();
+                                                Thread.Sleep(1000);
+                                                historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
+                                                zayvkiController.UpdateObrabotka(nomerNameZayavki);
+                                                zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
+                                                flag = true;
+                                                break;
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+                            }
                         }
                     }
 
@@ -195,13 +257,60 @@ namespace AppWork.MyWinForm
                     {
                         if (newitem.Online == "На работе")
                         {
-                            var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
-                            newispolnitel.Click();
-                            Thread.Sleep(1000);
-                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
-                            zayvkiController.UpdateObrabotka(nomerNameZayavki);
-                            zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
-                            break;
+                            foreach (var key in keysAndPrioritetsController.ListKeysAndPrioritets)
+                            {
+                                if (key.Login == newitem.Login)
+                                {
+                                    if (union.Contains(key.NameKey))
+                                    {
+                                        if (key.Prioritet == 1)
+                                        {
+                                            var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
+                                            newispolnitel.Click();
+                                            Thread.Sleep(1000);
+                                            historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
+                                            zayvkiController.UpdateObrabotka(nomerNameZayavki);
+                                            zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+         
+
+                    if (flag == false)
+                    {
+                        var result1 = rabontnikController.ListRabotniki.ToList();
+                        foreach (var newitem in result1)
+                        {
+                            if (newitem.Online == "На работе")
+                            {
+                                foreach (var key in keysAndPrioritetsController.ListKeysAndPrioritets)
+                                {
+                                    if (key.Login == newitem.Login)
+                                    {
+                                        if (union.Contains(key.NameKey))
+                                        {
+                                            if (key.Prioritet == 0)
+                                            {
+                                                var newispolnitel = web.FindElement(By.XPath($"//div/div/*[text()='{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})']"));
+                                                newispolnitel.Click();
+                                                Thread.Sleep(1000);
+                                                historysController.AddUpdateLoginDataTime(newitem.Login, nomerNameZayavki, DateTime.Now);
+                                                zayvkiController.UpdateObrabotka(nomerNameZayavki);
+                                                zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
+                                                flag = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
