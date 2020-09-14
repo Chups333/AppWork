@@ -191,7 +191,7 @@ namespace AppWork.MyWinForm
                                             zayvkiController.UpdateObrabotka(nomerNameZayavki);
                                             zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
                                             flag = true;
-                                            break;
+                                            goto End;
                                         }
 
                                     }
@@ -201,6 +201,7 @@ namespace AppWork.MyWinForm
                             }
                         }
                     }
+                End:;
 
                     if (flag == false)
                     {
@@ -225,7 +226,7 @@ namespace AppWork.MyWinForm
                                                 zayvkiController.UpdateObrabotka(nomerNameZayavki);
                                                 zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
                                                 flag = true;
-                                                break;
+                                                goto End;
                                             }
 
                                         }
@@ -248,6 +249,8 @@ namespace AppWork.MyWinForm
                         }
 
                     }
+
+             
 
                 }
                 else
@@ -272,7 +275,7 @@ namespace AppWork.MyWinForm
                                             zayvkiController.UpdateObrabotka(nomerNameZayavki);
                                             zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
                                             flag = true;
-                                            break;
+                                            goto End;
                                         }
                                     }
                                 }
@@ -280,7 +283,7 @@ namespace AppWork.MyWinForm
                         }
 
                     }
-         
+                End:;
 
                     if (flag == false)
                     {
@@ -304,7 +307,7 @@ namespace AppWork.MyWinForm
                                                 zayvkiController.UpdateObrabotka(nomerNameZayavki);
                                                 zayvkiController.UpdateIspolnitel(nomerNameZayavki, $"{newitem.Surname} {newitem.Name} {newitem.Patronymic} ({newitem.Login})");
                                                 flag = true;
-                                                break;
+                                                goto End;
                                             }
                                         }
                                     }
@@ -313,6 +316,7 @@ namespace AppWork.MyWinForm
 
                         }
                     }
+
                 }
 
 
