@@ -669,13 +669,13 @@ namespace AppWork.MyWinForm
                 var flag = false;
                 if (findElement == 0)
                 {
-                    web.Navigate().GoToUrl("https://" + f4.LOGINTEXT.Text + ":" + f4.PASSTEXT.Text + "@" + "support.rosatom.ru/sm/index.do");
+                    //web.Navigate().GoToUrl("https://" + f4.LOGINTEXT.Text + ":" + f4.PASSTEXT.Text + "@" + "support.rosatom.ru/sm/index.do");
                     #region Нужно мне авторизация
-                    //web.FindElement(By.XPath("//input[@id='username']")).SendKeys(f4.LOGINTEXT.Text);
-                    //Thread.Sleep(1000);
-                    //web.FindElement(By.XPath("//input[@id='password']")).SendKeys(f4.PASSTEXT.Text);
-                    //Thread.Sleep(1000);
-                    //web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
+                    web.FindElement(By.XPath("//input[@id='username']")).SendKeys(f4.LOGINTEXT.Text);
+                    Thread.Sleep(1000);
+                    web.FindElement(By.XPath("//input[@id='password']")).SendKeys(f4.PASSTEXT.Text);
+                    Thread.Sleep(1000);
+                    web.FindElement(By.XPath("//input[@id='SubmitCreds']")).Click();
                     #endregion
                     flag = true;
                 }

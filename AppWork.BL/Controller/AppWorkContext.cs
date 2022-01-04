@@ -10,7 +10,7 @@ namespace AppWork.BL.Controller
 {
     public class AppWorkContext : DbContext
     {
-        public AppWorkContext() : base("SANCHDBDB")
+        public AppWorkContext() : base("SANCHDBDB1")
         {
 
         }
